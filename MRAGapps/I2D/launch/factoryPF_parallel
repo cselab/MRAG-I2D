@@ -1,0 +1,7 @@
+PF_DipoleLattice d=1 v=1 xm=0 ym=0 dirx=-1 diry=0 T=1
+PF_DipoleLattice d=1 v=1 xm=0 ym=-7 dirx=-1 diry=0 T=1
+PF_DipoleLattice d=1 v=1 xm=0 ym=-14 dirx=-1 diry=0 T=1
+PF_DipoleLattice d=1 v=1 xm=0 ym=-21 dirx=-1 diry=0 T=1
+PF_DipoleLattice d=1 v=1 xm=0 ym=7 dirx=-1 diry=0 T=1
+PF_DipoleLattice d=1 v=1 xm=0 ym=14 dirx=-1 diry=0 T=1
+PF_DipoleLattice d=1 v=1 xm=0 ym=21 dirx=-1 diry=0 T=1

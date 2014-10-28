@@ -1,0 +1,51 @@
+CC=g++
+
+CPPFLAGS+= -Wall -Wno-unknown-pragmas -Wno-reorder -Wno-comment -Wno-deprecated 
+
+ifeq "$(CC)" "icc"
+	CPPFLAGSOPT+= -diag-disable remark -wd68 -O3 -xHOST -ansi-alias -fno-fnalias -fno-alias  -diag-disable remark -wd68 -ip -ipo -fast
+else
+	CPPFLAGSOPT+= -O3 -fstrict-aliasing -msse3 -Wno-missing-braces -fdiagnostics-show-option 
+endif
+
+TBB_INC_DIR=/Users/mimeauc/tbb30_131oss/include/
+TBB_LIB_DIR=/Users/mimeauc/tbb30_131oss/build/macos_ia32_gcc_cc4.2.1_os10.6.6_release/
+
+VTK_INC_DIR=/usr/local/include/vtk-5.6/
+VTK_LIB_DIR=/usr/local/lib/vtk-5.6/
+
+CPPFLAGS+= -I$(TBB_INC_DIR) -I$(VTK_INC_DIR)
+
+LIBS += \
+	-L$(TBB_LIB_DIR) \
+	-ltbb \
+	-ltbbmalloc \
+	-L$(VTK_LIB_DIR) \
+	-lvtkViews \
+	-lvtkInfovis \
+	-lvtkWidgets \
+	-lvtkHybrid \
+	-lvtkRendering \
+	-lvtkGraphics \
+	-lvtkverdict \
+	-lvtkImaging \
+	-lvtkftgl \
+	-lvtkfreetype \
+	-lvtkIO \
+	-lvtkFiltering \
+	-lvtkCommon \
+	-lm \
+	-lvtkDICOMParser \
+	-lvtkmetaio \
+	-lvtksqlite \
+	-lvtkpng \
+	-lvtktiff \
+	-lvtkjpeg \
+	-lvtkexpat \
+	-lvtksys \
+	-lvtkexoIIc \
+	-lvtkNetCDF \
+	-lvtklibxml2 \
+	-lvtkzlib \
+	-lpthread \
+	-ldl

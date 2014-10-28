@@ -1,0 +1,2 @@
+RL_Foods d=10 n=5
+RL_SmartyGluttons d=1 T=0.02 nactions=4 cutoffGluttons=7.5 cutoffFood=7.5 steer=0.5 noise=0.005 selfavoid=-1.0 NN=-1 n=500

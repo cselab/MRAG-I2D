@@ -1,0 +1,33 @@
+CC=g++
+
+#CPPFLAGS+= -Wall -Wno-unknown-pragmas -Wno-reorder -Wno-comment -Wno-deprecated
+
+OPENMP_FLAG= -openmp
+
+ifeq "$(CC)" "icc"
+CPPFLAGSOPT+= -diag-disable remark -wd68 -O3 -xHOST -ansi-alias -fno-fnalias -fno-alias -ip -ipo -fast $(OPENMP_FLAG)
+else
+OPENMP_FLAG= -fopenmp
+CPPFLAGSOPT+= -O3 -fstrict-aliasing -msse3 -Wno-missing-braces -fdiagnostics-show-option $(OPENMP_FLAG) -lm -lc -lstdc++
+endif
+
+TBB_INC_DIR=/cluster/work/infk/wvanrees/apps/TBB/tbb41_20130613oss/include/
+TBB_LIB_DIR=/cluster/work/infk/wvanrees/apps/TBB/tbb41_20130613oss/build/linux_intel64_gcc_cc4.7.0_libc2.12_kernel2.6.32_release
+
+VTK_INC_DIR=/cluster/work/infk/cconti/VTK5.8_gcc/include/vtk-5.8/
+VTK_LIB_DIR=/cluster/work/infk/cconti/VTK5.8_gcc/lib/vtk-5.8/
+
+CPPFLAGS+= -I$(TBB_INC_DIR) -I$(VTK_INC_DIR)
+
+export LD_LIBRARY_PATH:=$(VTK_LIB_DIR):$(LD_LIBRARY_PATH)
+
+LIBS += \
+        -L$(TBB_LIB_DIR) \
+        -ltbb \
+        -ltbbmalloc \
+        -L$(VTK_LIB_DIR) \
+	-lvtkCommon \
+	-lvtkIO \
+        -lpthread \
+        -ldl \
+        $(OPENMP_FLAG)

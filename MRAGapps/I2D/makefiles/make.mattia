@@ -1,0 +1,53 @@
+CC=g++
+
+CPPFLAGS+= -g -Wno-unknown-pragmas -Wno-reorder -Wno-comment -Wno-deprecated
+
+OPENMP_FLAG= -openmp
+
+ifeq "$(CC)" "icc"
+CPPFLAGSOPT+= -diag-disable remark -wd68 -O3 -xHOST -ansi-alias -fno-fnalias -fno-alias
+else
+OPENMP_FLAG= /usr/local/lib/libgomp.a
+CPPFLAGSOPT+= -O3 -msse3
+endif
+
+TBB_INC_DIR=/Users/mgazzola/mattia/cse/lib/TBB/tbb40_233oss/include/
+TBB_LIB_DIR=/Users/mgazzola/mattia/cse/lib/TBB/tbb40_233oss/build/macos_intel64_gcc_cc4.2.1_os10.7.2_release/
+
+VTK_INC_DIR=/Users/mgazzola/mattia/cse/lib/VTK/vtk-5.8.0/VTKBuild/include/vtk-5.8/
+VTK_LIB_DIR=/Users/mgazzola/mattia/cse/lib/VTK/vtk-5.8.0/VTKBuild/lib/vtk-5.8/
+
+OPENGL_LIB=-framework OpenGL -framework GLUT /opt/local/lib/libGLEW.a
+
+CPPFLAGS+= -I$(TBB_INC_DIR) -I$(VTK_INC_DIR) $(OPENMP_FLAG)
+
+LIBS += \
+	-L$(TBB_LIB_DIR) \
+	-ltbb \
+	-ltbbmalloc \
+	-L$(VTK_LIB_DIR) \
+	-lvtkHybrid \
+	-lvtkVolumeRendering \
+	-lvtkRendering \
+	-lvtkIO \
+	-lvtkGenericFiltering \
+	-lvtkGraphics \
+	-lvtkImaging \
+	-lvtkFiltering \
+	-lvtkCommon \
+	-lvtkftgl \
+	-lvtkfreetype \
+	-lvtkDICOMParser \
+	-lvtkexpat \
+	-lvtktiff \
+	-lvtkpng \
+	-lvtkjpeg \
+	-lvtkzlib \
+	-lvtksys -lz \
+	$(OPENGL_LIB) \
+	$(OPENMP_FLAG)
+	
+	
+#-L/Developer_from_old_mac/opt/intel/Compiler/11.0/064/lib/ \
+#-lirc \
+#-limf \

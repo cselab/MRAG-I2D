@@ -1,0 +1,55 @@
+CC=icc
+
+CPPFLAGS+= -Wall -Wno-unknown-pragmas -Wno-reorder -Wno-comment -Wno-deprecated
+
+OPENMP_FLAG= -openmp
+
+ifeq "$(CC)" "icc"
+CPPFLAGSOPT+= -diag-disable remark -wd68 -O3 -xHOST -ansi-alias -fno-fnalias -fno-alias -ip -ipo -fast $(OPENMP_FLAG)
+else
+OPENMP_FLAG= -fopenmp
+CPPFLAGSOPT+= -O3 -fstrict-aliasing -msse3 -Wno-missing-braces -fdiagnostics-show-option $(OPENMP_FLAG)
+endif
+
+TBB_INC_DIR=/cluster/home/mavt/alaskari/Library/tbb22_012oss/include
+TBB_LIB_DIR=/cluster/home/mavt/alaskari/Library/tbb22_012oss/build/linux_intel64_icc_cc4.1.2_libc2.5_kernel2.6.18_release
+
+VTK_INC_DIR=/cluster/home/mavt/alaskari/Library/myVTK/include/vtk-5.2
+VTK_LIB_DIR=/cluster/home/mavt/alaskari/Library/myVTK/lib/vtk-5.2
+
+CPPFLAGS+= -I$(TBB_INC_DIR) -I$(VTK_INC_DIR)
+
+LIBS += \
+        -L$(TBB_LIB_DIR) \
+        -ltbb \
+        -ltbbmalloc \
+        -L$(VTK_LIB_DIR) \
+        -lvtkViews \
+        -lvtkInfovis \
+        -lvtkWidgets \
+        -lvtkHybrid \
+        -lvtkRendering \
+        -lvtkGraphics \
+        -lvtkverdict \
+        -lvtkImaging \
+        -lvtkftgl \
+        -lvtkfreetype \
+        -lvtkIO \
+        -lvtkFiltering \
+        -lvtkCommon \
+        -lm \
+        -lvtkDICOMParser \
+        -lvtkmetaio \
+        -lvtksqlite \
+        -lvtkpng \
+        -lvtktiff \
+        -lvtkjpeg \
+        -lvtkexpat \
+        -lvtksys \
+        -lvtkexoIIc \
+        -lvtkNetCDF \
+        -lvtklibxml2 \
+        -lvtkzlib \
+        -lpthread \
+        -ldl \
+        $(OPENMP_FLAG)

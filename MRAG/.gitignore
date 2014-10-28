@@ -1,0 +1,4 @@
+## generic files to ignore
+*~
+*.o
+CVS/

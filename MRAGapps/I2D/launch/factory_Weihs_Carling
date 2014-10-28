@@ -1,0 +1,7 @@
+IF2D_CarlingFish d=1 xm=0 ym=0 phase=0.0 angle=0 T=1
+IF2D_CarlingFish d=1 xm=0 ym=0.75 phase=0.0 angle=0 T=1
+IF2D_CarlingFish d=1 xm=0 ym=-0.75 phase=0.0 angle=0 T=1
+IF2D_CarlingFish d=1 xm=-1.45 ym=0.375 phase=0.0 angle=0 T=1
+IF2D_CarlingFish d=1 xm=-1.45 ym=-0.375 phase=0.0 angle=0 T=1
+IF2D_CarlingFish d=1 xm=1.45 ym=0.375 phase=0.0 angle=0 T=1
+IF2D_CarlingFish d=1 xm=1.45 ym=-0.375 phase=0.0 angle=0 T=1

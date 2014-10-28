@@ -1,0 +1,4 @@
+StefanFishSmart d=1 xm=3.5 ym=0 tau=1.44 angle=-90 T=1
+StefanFishSmart d=1 xm=-3.5 ym=0 tau=1.44 angle=90 T=1
+StefanFishSmart d=1 xm=0 ym=3.5 tau=1.44 angle=0 T=1
+StefanFishSmart d=1 xm=0 ym=-3.5 tau=1.44 angle=180 T=1

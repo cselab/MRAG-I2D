@@ -1,0 +1,375 @@
+hn ?= $(shell hostname)
+username ?= $(shell whoami)
+
+ifeq "$(hn)" "taylor.ethz.ch"
+include make.angeliki
+endif		
+
+ifeq "$(hn)" "olli.inf.ethz.ch"
+include make.olli
+endif
+
+ifeq "$(hn)" "natalie.ethz.ch"
+include make.mattia
+endif
+
+ifeq "$(hn)" "Mattias-MacBook-Pro.local"
+include make.mattia
+endif
+
+ifeq "$(hn)" "public-docking-nw-4-122.ethz.ch"
+include make.mattia
+endif
+
+ifeq "$(hn)" "macross.inf.ethz.ch"
+include make.mattia
+endif
+
+ifeq "$(hn)" "sequoia.inf.ethz.ch"
+include make.giovanni
+endif
+
+ifeq "$(hn)" "jerome.zyxel.com"
+include make.atchieu.jerome
+endif
+
+ifeq "$(hn)" "marcel.ethz.ch"
+include make.atchieu.marcel
+endif
+
+ifeq "$(hn)" "vpn-global-111-dhcp.ethz.ch"
+include make.rosso
+endif
+
+ifeq "$(hn)" "rosso.inf.ethz.ch"
+include make.rosso
+endif
+
+ifeq "$(hn)" "xenon.inf.ethz.ch"
+include make.roman
+endif
+
+ifneq "$(findstring brutus,$(hn))" ""
+	ifeq "$(username)" "mgazzola"
+		include make.brutus
+	endif
+
+	ifeq "$(username)" "alexiad"
+		include make.alexiaBrutus
+	endif
+
+	ifeq "$(username)" "atchieu"
+		include make.atchieu.brutus
+	endif
+
+	ifeq "$(username)" "alaskari"
+		include make.angelikiBrutus
+	endif
+
+        ifeq "$(username)" "tosimon"
+	        include make.simon
+        endif
+
+        ifeq "$(username)" "hbabak"
+	        include make.brutus.hbabak
+        endif
+
+        ifeq "$(username)" "wvanrees"
+	        include make.brutus.wvanrees
+        endif
+
+endif
+
+ap ?= double
+bs ?= 32
+fmm-order ?= 12
+fmm-lmax ?= 9
+fmm-smax ?= 200
+fmm-sse-noprecdiv ?=1
+fmm-sse-mixedprec ?= 1
+
+nthreads ?= 48
+
+CPPFLAGS += -D_BLOCKSIZE_=$(bs) -D_MRAG_TBB_NTHREADS_HINT=$(nthreads) -D_MRAG_REAL_=$(ap)
+CPPFLAGS += -D_ORDER_=$(fmm-order) -D_FMM_MAX_LEVEL_=$(fmm-lmax) -D_SMAX=$(fmm-smax) 
+
+ifeq "$(config)" "production"
+CPPFLAGS += -DNDEBUG
+else
+CPPFLAGS += -g
+endif 
+
+ifeq "$(fmm-sse-mixedprec)" "1"
+CPPFLAGS += -D_FMM_MIXEDPREC_KERNELS_
+endif 
+
+ifeq "$(fmm-sse-noprecdiv)" "1"
+CPPFLAGS += -D_FMM_NOPRECDIV_KERNELS_
+endif
+
+CPPFLAGS+= -DVTK_EXCLUDE_STRSTREAM_HEADERS
+
+CPPFLAGS += -I../source/ -I../source/mani-fmm2d/ -I../source/mattia-RL/ -I../source/potential-flow/ -I../../../MRAG/source/
+
+LIBS ?= -lvtkHybrid \
+	-lvtkVolumeRendering \
+	-lvtkRendering \
+	-lvtkIO \
+	-lvtkGenericFiltering \
+	-lvtkGraphics \
+	-lvtkImaging \
+	-lvtkFiltering \
+	-lvtkCommon \
+	-lvtkftgl \
+	-lvtkDICOMParser \
+	-lvtksys 
+
+LIBS += -lstdc++ -ltbb -ltbbmalloc
+
+TESTOBJS = \
+	I2_main.o \
+	MRAGBoundaryBlockInfo.o \
+	MRAGProfiler.o \
+	MRAGWavelets_StaticData.o \
+	binomial.o \
+	QtBox.o \
+	QuadTree.o \
+	RL_MultiTable.o \
+	RL_QLearning.o \
+	rng.o \
+	I2_TestDumping.o \
+	I2_CircularObstacleOperator.o \
+	I2_TestDiffusion.o \
+	I2_DiffusionOperator_4thOrder.o \
+	I2_TestAdvection.o \
+	I2_AdvectionOperator.o \
+	I2_AdvectionOperator_Particles.o \
+	I2_TestPenalizationAndOther.o \
+	I2_PenalizationOperator.o \
+	I2_DivOperator.o \
+	I2_VelocitySolver_Mani.o \
+	I2_CoreFMM_AggressiveVel.o \
+	I2_AggressiveDiego.o \
+	I2_CoreFMM_SSE.o \
+	I2_CoreFMM_Check.o \
+	I2_CoreFMM_PlanBuilder.o \
+	I2_CoreFMM_PlanBuilderWim.o \
+	I2_FMMTypes.o \
+	I2_TestPoissonEquation.o \
+	I2_CurlVelocityOperator_4thOrder.o \
+	I2_CurlVelocityOperator_2ndOrder.o \
+	I2_WingObstacleOperator.o \
+	I2_Axisymmetrization.o \
+	I2_TestPoissonEquationPotential.o \
+	I2_PotentialSolver_Mattia.o \
+	I2_TestMultipole.o \
+	I2_VelocitySolver_Wim.o \
+	I2_Clear.o
+
+NOMINEPATRIS_OBJS = \
+	MRAGBoundaryBlockInfo.o \
+	MRAGProfiler.o \
+	MRAGWavelets_StaticData.o \
+	binomial.o \
+	QtBox.o \
+	QuadTree.o \
+	RL_MultiTable.o \
+	RL_QLearning.o \
+	rng.o \
+	I2_CircularObstacleOperator.o \
+	I2_RotatingWheelObstacle.o \
+	I2_RectangularObstacleOperator.o \
+	I2_DiffusionOperator_4thOrder.o \
+	I2_AdvectionOperator.o \
+	I2_AdvectionOperator_Particles.o \
+	I2_PenalizationOperator.o \
+	I2_DivOperator.o \
+	I2_FlowPastFixedObstacle.o \
+	I2_VelocitySolver_Mani.o \
+	I2_VelocitySolver_Wim.o \
+	I2_CoreFMM_AggressiveVel.o \
+	I2_AggressiveDiego.o \
+	I2_CoreFMM_SSE.o \
+	I2_CoreFMM_Check.o \
+	I2_CoreFMM_PlanBuilder.o \
+	I2_CoreFMM_PlanBuilderWim.o \
+	I2_FMMTypes.o \
+	I2_AveMaria.o \
+	I2_WingObstacleOperator.o \
+	I2_LinkedBodies.o \
+	I2_CurlVelocityOperator_4thOrder.o \
+	I2_EllipticalObstacleOperator.o \
+	I2_FlowPastFloatingObstacle.o \
+	I2_FloatingCylinder.o \
+	I2_FloatingRotatingCylinderPair.o \
+	I2_FloatingObstacleOperator.o \
+	I2_FloatingObstacleVector.o \
+	I2_Clear.o \
+	I2_ImposedCylinder.o \
+	I2_CarlingFish.o \
+	I2_Axisymmetrization.o
+
+CHLOE_OBJS = \
+	MRAGBoundaryBlockInfo.o \
+	MRAGProfiler.o \
+	MRAGWavelets_StaticData.o \
+	binomial.o \
+	QtBox.o \
+	QuadTree.o \
+	RL_MultiTable.o \
+	RL_QLearning.o \
+	rng.o \
+	I2_CircularObstacleOperator.o \
+	I2_FlowPastFixedObstacle.o \
+	I2_KillVortRightBoundaryOperator.o \
+	I2_RectangularObstacleOperator.o \
+	I2_DiffusionOperator_4thOrder.o \
+	I2_AdvectionOperator.o \
+	I2_AdvectionOperator_Particles.o \
+	I2_PenalizationOperator.o \
+	I2_DivOperator.o \
+	I2_MRAGOptimisation.o \
+	I2_VelocitySolver_Mani.o \
+	I2_VelocitySolver_Wim.o \
+	I2_CoreFMM_AggressiveVel.o \
+	I2_AggressiveDiego.o \
+	I2_CoreFMM_SSE.o \
+	I2_CoreFMM_Check.o \
+	I2_CoreFMM_PlanBuilder.o \
+	I2_CoreFMM_PlanBuilderWim.o \
+	I2_FMMTypes.o \
+	I2_Chloe.o \
+	I2_WingObstacleOperator.o \
+	I2_Ingo.o \
+	I2_LinkedBodies.o \
+	I2_WingAngleOfAttack.o \
+	I2_CurlVelocityOperator_4thOrder.o \
+	I2_EllipticalObstacleOperator.o \
+	I2_ImposedCylinder.o \
+	I2_FloatingCylinder.o \
+	I2_FloatingRotatingCylinderPair.o \
+	I2_FloatingObstacleVector.o \
+	I2_Clear.o \
+	I2_CarlingFish.o \
+	I2_StefanFish.o \
+	I2_ThreeLinkFish.o \
+	I2_FlowPastFloatingObstacle.o \
+	I2_FluidMediatedInteractions.o \
+	I2_RotatingCylinderPair.o \
+	I2_ImposedCylinderOscillation.o \
+	I2_ObjectFactory.o \
+	I2_ImposedEllipse.o \
+	I2_ImposedEllipseOscillation.o \
+	I2_ImposedEllipseRotation.o \
+	I2_ImposedCylinderRotation.o \
+	I2_FloatingEllipse.o \
+	I2_RotatingWheelObstacle.o \
+	I2_FloatingObstacleOperator.o \
+	I2_ImposedCylinderStopAndGo.o \
+	I2_PotentialSolver_Mattia.o \
+	I2_CStartLarva.o \
+	I2_CarlingFishMorph.o \
+	I2_StefanFishMorph.o \
+	I2_FTLE.o \
+	I2_SmartInteractions.o \
+	I2_StefanFishSmart.o \
+	I2_CarlingFishAirfoil.o \
+	I2_StefanFishSmartInline.o \
+	I2_StefanFishSmartLattice.o \
+	I2_PassiveTracer.o \
+	I2_StefanFishSmartSpiral.o \
+	I2_ComputeEfficiency.o \
+	I2_ImposedAirfoil.o \
+	I2_PitchingAirfoil.o \
+
+RL_OBJS = \
+	MRAGProfiler.o \
+	RL_main.o \
+	RL_TestTabular.o \
+	RL_MultiTable.o \
+	RL_QLearning.o \
+	rng.o \
+	RL_Agent.o \
+	RL_AgentVector.o \
+	RL_ObjectFactory.o \
+	RL_Food.o \
+	RL_SmartyGlutton.o \
+
+ALEXIA_OBJS = \
+	MRAGProfiler.o \
+	PF_main.o \
+	RL_MultiTable.o \
+	RL_QLearning.o \
+	rng.o \
+	PF_AgentVector.o \
+	PF_Solver.o \
+	PF_ObjectFactory.o \
+	PF_Dipole.o \
+	PF_Agent.o \
+	PF_DipoleInline.o \
+	PF_SwarmCylinders.o \
+	PF_DipoleInlineBravais.o \
+	PF_DipoleEight.o
+
+ifeq "$(mpi)" "1"
+	TESTOBJS += \
+		I2_VelocitySolverMPI_Mani.o
+
+	NOMINEPATRIS_OBJS += \
+		I2_VelocitySolverMPI_Mani.o
+
+	CHLOE_OBJS += \
+		I2_VelocitySolverMPI_Mani.o
+
+	override CC=mpicxx
+
+	CPPFLAGS += -D_I2_MPI_
+endif
+
+
+VPATH := ../source/ ../source/mani-fmm2d/ ../source/mattia-RL/ ../source/potential-flow/ ../../../MRAG/source/MRAGcore
+.DEFAULT_GOAL := avemaria
+
+
+if2d-tests: $(TESTOBJS)
+	$(CC)  $^ $(LIBS) -o $@
+	@echo done
+
+avemaria: $(NOMINEPATRIS_OBJS)
+	$(CC)  $^ $(LIBS) -o $@
+	@echo done
+
+chloe: $(CHLOE_OBJS)
+	$(CC) $(LIBS) $^ -o $@
+	@echo done
+
+alexia: $(ALEXIA_OBJS)
+	$(CC) $(LIBS) $^ -o $@
+	@echo done
+
+rl: $(RL_OBJS)
+	$(CC) $(LIBS) $^ -o $@
+	@echo done
+
+#I2_CoreFMM_AggressiveVel.o: I2_CoreFMM_AggressiveVel.cpp
+#	echo SOURCES = $@
+#	$(CC ) $(CPPFLAGS) -axTW -ip -c $^ -o $@
+
+ifeq "$(CC)" "icc"
+KERNELOPTFLAGS = -O3 -xHOST -ip -ansi-alias -fno-fnalias -fno-alias -falign-functions -diag-disable remark -wd68
+else
+KERNELOPTFLAGS = -O3 -fstrict-aliasing -msse3 -Wno-missing-braces -fdiagnostics-show-option
+endif
+
+I2_AggressiveDiego.o: I2_AggressiveDiego.cpp
+	echo SOURCES = $@
+	$(CC) $(CPPFLAGS) $(KERNELOPTFLAGS) -O3 -c $^ -o $@
+	$(CC) $(CPPFLAGS) $(KERNELOPTFLAGS) -O3 -c $^ -S 
+
+%.o: %.cpp
+	$(CC)  $(CPPFLAGS) $(CPPFLAGSOPT) -c $^ -o $@
+
+clean:
+	rm -f *.o
+	rm -f *.s
+	rm -f avemaria if2d-tests rl chloe alexia

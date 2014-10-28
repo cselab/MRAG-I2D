@@ -1,0 +1,45 @@
+CC=/Users/atchieu/Work/Compilers/gcc/4.8.0/bin/gcc 
+
+CPPFLAGS+= 
+
+OPENMP_FLAG= -fopenmp
+#OPENMP_FLAG= /Users/atchieu/Work/Library/gcc/lib/libgomp.a
+CPPFLAGSOPT+= -O3 -fstrict-aliasing -msse3 -Wno-missing-braces -fdiagnostics-show-option -Wno-sign-compare -Wno-parentheses -Wno-conversion-null -Wno-deprecated
+
+TBB_INC_DIR= /usr/local/tbb
+TBB_LIB_DIR= /usr/local/lib
+VTK_INC_DIR= /usr/local/include/vtk-5.10
+VTK_LIB_DIR= /usr/local/lib/vtk-5.10
+
+OPENGL_LIB=-framework OpenGL -framework GLUT /usr/local/lib/libGLEW.a
+
+CPPFLAGS+= -I$(TBB_INC_DIR) -I$(VTK_INC_DIR) $(OPENMP_FLAG)
+
+LIBS += \
+	-L$(TBB_LIB_DIR) \
+	-ltbb \
+	-ltbbmalloc \
+	-L$(VTK_LIB_DIR) \
+	-lvtkHybrid \
+	-lvtkVolumeRendering \
+	-lvtkRendering \
+	-lvtkIO \
+	-lvtkGenericFiltering \
+	-lvtkGraphics \
+	-lvtkImaging \
+	-lvtkFiltering \
+	-lvtkCommon \
+	-lvtkftgl \
+	-lvtkfreetype \
+	-lvtkDICOMParser \
+	-lvtkexpat \
+	-lvtktiff \
+	-lvtkpng \
+	-lvtkjpeg \
+	-lvtkzlib \
+	-lvtksys -lz \
+	$(OPENGL_LIB) \
+	$(OPENMP_FLAG)
+	
+#-lirc \
+#-limf \

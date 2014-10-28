@@ -1,0 +1,8 @@
+RL_CircularWall
+RL_DynamicColumn d=12 xm=-16 ym=0
+RL_DynamicColumn d=14 xm=14 ym=0
+RL_DynamicColumn d=10 xm=0 ym=12
+RL_DynamicColumn d=6 xm=-3 ym=-13
+RL_DynamicColumn d=4 xm=0 ym=-6
+RL_Column d=9 xm=0 ym=0
+RL_SmartyDodgers d=1 T=0.1 n=500

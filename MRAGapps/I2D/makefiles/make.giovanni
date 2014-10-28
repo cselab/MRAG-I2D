@@ -1,0 +1,22 @@
+CC=g++
+
+CPPFLAGS+= -Wall -Wno-unknown-pragmas -Wno-reorder -Wno-comment -Wno-deprecated -openmp
+
+ifeq "$(CC)" "icc"
+CPPFLAGSOPT+= -diag-disable remark -wd68 -O3 -xHOST -ansi-alias -fno-fnalias -fno-alias
+else
+CPPFLAGSOPT+= -O3 -fstrict-aliasing -msse3 -Wno-missing-braces -fdiagnostics-show-option 
+endif
+
+TBB_INC_DIR=
+TBB_LIB_DIR=
+
+VTK_INC_DIR=
+VTK_LIB_DIR=
+
+OPENGL_LIB=-framework OpenGL -framework GLUT /opt/local/lib/libGLEW.a
+
+CPPFLAGS+= -I$(TBB_INC_DIR) -I$(VTK_INC_DIR)
+
+LIBS += \
+	$(OPENGL_LIB)

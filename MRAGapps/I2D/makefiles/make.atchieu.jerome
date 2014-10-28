@@ -1,0 +1,53 @@
+CC=/Users/atchieu/Work/Compilers/gcc/4.8.0/bin/gcc 
+
+# Super warnings everywhere
+#CPPFLAGS+= -Wall -Wno-unknown-pragmas -Wno-reorder -Wno-comment -Wno-deprecated -Wno-unused-value
+
+# Debug
+#CPPFLAGS+= -g -Wno-unknown-pragmas -Wno-reorder -Wno-comment -Wno-deprecated
+
+# No debug
+CPPFLAGS+= -Wno-unknown-pragmas -Wno-reorder -Wno-comment -Wno-deprecated
+
+OPENMP_FLAG= -fopenmp
+#OPENMP_FLAG= /Users/atchieu/Work/Compilers/gcc/4.8.0/lib/libgomp.a # pretty sure I don't need this
+
+CPPFLAGSOPT+= -O3 -fstrict-aliasing -msse3 -Wno-missing-braces -fdiagnostics-show-option -Wno-sign-compare -Wno-parentheses
+
+TBB_INC_DIR=/usr/local/tbb
+TBB_LIB_DIR=/usr/local/lib
+VTK_INC_DIR=/usr/local/include/vtk-5.10
+VTK_LIB_DIR=/usr/local/lib/vtk-5.10
+
+OPENGL_LIB=-framework OpenGL -framework GLUT /usr/local/lib/libGLEW.a
+
+CPPFLAGS+= -I$(TBB_INC_DIR) -I$(VTK_INC_DIR) $(OPENMP_FLAG)
+
+LIBS += \
+	-L$(TBB_LIB_DIR) \
+	-ltbb \
+	-ltbbmalloc \
+	-L$(VTK_LIB_DIR) \
+	-lvtkHybrid \
+	-lvtkVolumeRendering \
+	-lvtkRendering \
+	-lvtkIO \
+	-lvtkGenericFiltering \
+	-lvtkGraphics \
+	-lvtkImaging \
+	-lvtkFiltering \
+	-lvtkCommon \
+	-lvtkftgl \
+	-lvtkfreetype \
+	-lvtkDICOMParser \
+	-lvtkexpat \
+	-lvtktiff \
+	-lvtkpng \
+	-lvtkjpeg \
+	-lvtkzlib \
+	-lvtksys -lz \
+	$(OPENGL_LIB) \
+	$(OPENMP_FLAG)
+	
+#-lirc \
+#-limf \

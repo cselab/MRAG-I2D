@@ -1,0 +1,44 @@
+CC=gcc
+
+CPPFLAGS+= -I/usr/local/include/vtk-5.6/ -I$(TBB_INC_DIR) -Wall -Wno-unknown-pragmas -Wno-reorder -Wno-comment -Wno-deprecated 
+
+OPENMP_FLAG= -fopenmp
+
+ifeq "$(CC)" "icc"
+CPPFLAGSOPT+= -diag-disable remark -wd68 -O3 -xHOST -ansi-alias -fno-fnalias -fno-alias  -diag-disable remark -wd68 -ip -ipo -fast
+else
+CPPFLAGSOPT+= -O3 -fstrict-aliasing -msse3 -Wno-missing-braces -fdiagnostics-show-option 
+endif
+
+TBB_INC_DIR=/Users/laskariangeliki/Documents/tbb40_297oss/include/
+#/Users/paralleluser/tbb22_012oss/include/
+TBB_LIB_DIR=/Users/laskariangeliki/Documents/tbb40_297oss/lib/
+#/Users/paralleluser/tbb22_012oss/ia32/cc4.0.1_os10.5.4/lib/
+
+OPENGL_LIB=-framework OpenGL -framework GLUT
+
+VTK_LIB_DIR=/usr/local/lib/vtk-5.6/
+
+LIBS += -L$(TBB_LIB_DIR) -ltbb -ltbbmalloc \
+	-L$(VTK_LIB_DIR) \
+	-lvtkHybrid \
+	-lvtkVolumeRendering \
+	-lvtkRendering \
+	-lvtkIO \
+	-lvtkGenericFiltering \
+	-lvtkGraphics \
+	-lvtkImaging \
+	-lvtkFiltering \
+	-lvtkCommon \
+	-lvtkftgl \
+	-lvtkfreetype \
+	-lvtkDICOMParser \
+	-lvtkexpat \
+	-lvtktiff \
+	-lvtkpng \
+	-lvtkjpeg \
+	-lvtkzlib \
+	-lvtksys -lz \
+	$(OPENGL_LIB) \
+	$(OPENMP_FLAG)
+	
