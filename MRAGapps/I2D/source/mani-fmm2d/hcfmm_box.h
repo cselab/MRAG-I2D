@@ -122,14 +122,14 @@ namespace HCFMM{
 		//assign operator:
 		Box & operator=(const Box &B)
 		{
-			level(B.level);
-			isleaf(B.isleaf);
-			vparticles(B.vparticles);
-			parent(B.parent);
-			nParticles(B.nParticles);
-			expansions(B.expansions),
-			got_COM(B.got_COM);
-			got_expansions(B.got_expansions);
+			level = B.level;
+			isleaf = B.isleaf;
+			vparticles = B.vparticles;
+			parent = B.parent;
+			nParticles = B.nParticles;
+			expansions = B.expansions;
+			got_COM = B.got_COM;
+			got_expansions = B.got_expansions;
 			
 			for (int d=0;d<Particle::dim;++d)
 			{
@@ -301,7 +301,7 @@ namespace HCFMM{
 		
 		inline bool operator<(const box_ref &b)
 		{
-			return this->level<b.level;
+			return this->p_Box->level<b.p_Box->level;
 		}
 		
 		
@@ -357,7 +357,7 @@ namespace HCFMM{
 		}
 		
 		box_walker(const box_walker &B):
-		_rootBox(B.rootBox),direct_list(B.direct_list),ws_list(B.direct_list),work_list(B.work_list)
+		_rootBox(B._rootBox),direct_list(B.direct_list),ws_list(B.ws_list),work_list(B.work_list)
 		{
 		}
 		
