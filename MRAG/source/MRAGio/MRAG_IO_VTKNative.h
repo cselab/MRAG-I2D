@@ -1,6 +1,9 @@
 #pragma once
 
-#include <vtkPoints.h> 
+// Define _MRAG_VTK to build the real VTK (.vtu) writer; otherwise Write() is a
+// no-op stub so the rest of the code builds without a VTK installation.
+#ifdef _MRAG_VTK
+#include <vtkPoints.h>
 #include <vtkCell.h>
 #include <vtkUnstructuredGrid.h>
 #include <vtkFloatArray.h>
@@ -8,6 +11,7 @@
 #include <vtkUnstructuredGridWriter.h>
 #include <vtkPointData.h>
 #include <vtkCellData.h>
+#endif
 
 namespace MRAG
 {
@@ -27,6 +31,9 @@ namespace MRAG
 	IO_VTKNative< TWavelets, TBlock, nChannels, iChannelStart >::
 	Write( GridType & inputGrid, BoundaryInfo & bInfo, string fileName_ )
 	{
+#ifndef _MRAG_VTK
+		(void)inputGrid; (void)bInfo; (void)fileName_;   // VTK output disabled
+#else
 		// Open output file
 		string filename  = fileName_ + ".vtu";
 		// Calculate total number of points and cells
@@ -186,5 +193,6 @@ namespace MRAG
 		points->Delete();
 		uGrid->Delete();
 		writer->Delete();
+#endif
 	}
 }
