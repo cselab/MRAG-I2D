@@ -35,10 +35,27 @@ CORE   = $(MRAG)/MRAGcore/MRAGWavelets_StaticData.cpp \
 pf: $(PF_SRC) $(RL_SRC) $(CORE)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $^ $(TBB_LIBS) $(GL_LIBS)
 
-run: pf
-	DYLD_LIBRARY_PATH=$(TBB_LIBDIR) ./pf -study LEARNING_DIPOLE
+# full LEARNING_DIPOLE study args (from launch/natalieLaunchPF.sh); reads ./factoryPF.
+# This is a long RL training run (learningTime 100000) -- Ctrl-C to stop.
+STUDY = -study LEARNING_DIPOLE -nthreads 1 -D 0.015 -xpos 0.5 -ypos 0.5 \
+        -lr 0.01 -gamma 0.98 -greedyEps 0.01 -shared 1 -isControlled 1 -smooth 0 \
+        -savefreq 100 -learnDump 1000 -learningTime 100000 -nLearningLevels 1 \
+        -fitnessTime 0 -navg 1 -fitnessSaveFreq 100000 -fitnessBuffer 1.5 \
+        -individualFitness true -exploitation true -factory factoryPF \
+        -fitselection 1 -islabframe 1 -isUsingTracers 0 -restart 0
+
+run: pf factoryPF
+	DYLD_LIBRARY_PATH=$(TBB_LIBDIR) ./pf $(STUDY)
+
+factoryPF:
+	cp ../../launch/factoryPF factoryPF
 
 clean:
 	rm -f pf
 
-.PHONY: run clean
+# remove run artifacts (keeps factoryPF)
+clean-run:
+	rm -f RestartTime.txt argumentparser.log data.txt fitness \
+	      learning_PF_* saveQ_PF_*
+
+.PHONY: run clean clean-run
