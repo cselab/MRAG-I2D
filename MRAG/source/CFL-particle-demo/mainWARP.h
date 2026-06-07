@@ -14,7 +14,7 @@
 
 
 #if _MRAG_OS == _MRAG_OS_APPLE
-#if defined(_MRAG_GLUT_VIZ) && defined(__apple__)
+#if defined(_MRAG_GLUT_VIZ) && defined(__APPLE__)
 #include "GLUT/glut.h"
 #elif defined(_MRAG_GLUT_VIZ)
 #include <stdlib.h>
