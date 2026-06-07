@@ -45,7 +45,7 @@ namespace MRAG
 
 #ifdef _MRAG_TBB
 #include <stdio.h>
-#include <tbb/task_scheduler_init.h>
+#include <tbb/global_control.h>
 #endif
 #pragma once
 namespace MRAG
