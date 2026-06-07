@@ -8,6 +8,7 @@
  *
  */
 
+#include <iomanip>
 #include "I2D_Axisymmetrization.h"
 #include "I2D_AdvectionOperator_Particles.h"
 #include "I2D_VelocitySolver_Mani.h"

@@ -17,6 +17,7 @@
  */
 #include <dirent.h>
 #include <time.h>
+#include <unistd.h>
 #include "I2D_FTLE.h"
 #include "I2D_AdvectionOperator_Particles.h"
 #include "I2D_VelocitySolver_Mani.h"
