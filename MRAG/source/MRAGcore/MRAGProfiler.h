@@ -24,7 +24,6 @@ using namespace std;
 #include "MRAGEnvironment.h"
 #ifdef _MRAG_TBB
 #include "tbb/tick_count.h"
-namespace tbb { class tick_count; }
 #else
 #include <time.h>
 #endif

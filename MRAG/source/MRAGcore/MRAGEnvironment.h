@@ -59,12 +59,12 @@ namespace MRAG
 		inline void setup(int threads=-1)
 		{
 #ifdef _MRAG_TBB
-			static tbb::task_scheduler_init * init = NULL;
-			
+			static tbb::global_control * init = NULL;
+
 			if (init == NULL)
 			{
 				const int nthreads = threads==-1? _MRAG_TBB_NTHREADS_HINT : threads;
-				init = new tbb::task_scheduler_init(nthreads);
+				init = new tbb::global_control(tbb::global_control::max_allowed_parallelism, nthreads);
 				printf("INITIALIZED THREADS=%d (_MRAG_TBB_NTHREADS_HINT is %d)\n", nthreads, _MRAG_TBB_NTHREADS_HINT);
 			}
 #endif
