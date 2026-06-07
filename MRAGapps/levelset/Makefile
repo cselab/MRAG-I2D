@@ -12,11 +12,11 @@ WARN     = -Wno-deprecated -Wno-unknown-pragmas -Wno-reorder -Wno-comment \
 CPPFLAGS = -I$(SRC_MRAG) $(WARN)
 CXXFLAGS = -O2 -g
 
-# Homebrew oneTBB (brew --prefix tbb)
-TBB_PREFIX = /opt/homebrew/opt/tbb
-TBB_FLAGS  = -I$(TBB_PREFIX)/include
-# scalable_allocator lives in libtbbmalloc, the rest in libtbb
-TBB_LIBS   = -L$(TBB_PREFIX)/lib -ltbb -ltbbmalloc
+# oneTBB via pkg-config. tbb.pc only lists -ltbb, so append -ltbbmalloc
+# (needed for tbb::scalable_allocator).
+TBB_FLAGS  = $(shell pkg-config --cflags tbb)
+TBB_LIBS   = $(shell pkg-config --libs tbb) -ltbbmalloc
+TBB_LIBDIR = $(shell pkg-config --variable=libdir tbb)
 
 CORE_CPP = \
   $(SRC_MRAG)/MRAGcore/MRAGWavelets_StaticData.cpp \
@@ -27,7 +27,7 @@ onecase: onecase.cpp $(CORE_CPP)
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TBB_FLAGS) -o $@ $^ $(TBB_LIBS)
 
 run: onecase
-	DYLD_LIBRARY_PATH=$(TBB_PREFIX)/lib ./onecase
+	DYLD_LIBRARY_PATH=$(TBB_LIBDIR) ./onecase
 
 clean:
 	rm -f onecase phi_refined.txt
