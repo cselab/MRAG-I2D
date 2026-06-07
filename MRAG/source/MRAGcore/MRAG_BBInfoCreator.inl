@@ -265,7 +265,7 @@ namespace MRAG
 			nBastards++;
 		
 			BastardGhost * bastard = allocator<BastardGhost>().allocate(1);
-			allocator<BastardGhost>().construct(bastard, BastardGhost( b.level, i));
+			new (bastard) BastardGhost( b.level, i);
 			
 			bastards.push_back(bastard);
 		}
@@ -633,7 +633,7 @@ void MRAG_BBInfoCreator<WaveletsType, BlockType>::_computeEasyGhosts_Analysis(Bo
 			nBastards++;
 			
 			BastardGhost * bastard = allocator<BastardGhost>().allocate(1);
-			allocator<BastardGhost>().construct(bastard, BastardGhost( b.level, i));
+			new (bastard) BastardGhost( b.level, i);
 		
 			bastards.push_back(bastard);
 		}
@@ -1007,7 +1007,7 @@ BoundaryInfoBlock* MRAG_BBInfoCreator<WaveletsType, BlockType>::createBoundaryIn
 		for(i[0]=s[0]; i[0]<e[0]; i[0]++)
 		{
 			BastardGhost * bastard = allocator<BastardGhost>().allocate(1);
-			allocator<BastardGhost>().construct(bastard, BastardGhost( b.level, i));
+			new (bastard) BastardGhost( b.level, i);
 			bastards.push_back(bastard);
 		}
 	}
@@ -1023,7 +1023,7 @@ BoundaryInfoBlock* MRAG_BBInfoCreator<WaveletsType, BlockType>::createBoundaryIn
 	
 	for(typename vector<BastardGhost *>::iterator it= bastards.begin(); it!= bastards.end(); it++)
 	{
-		allocator<BastardGhost>().destroy(*it);
+		(*it)->~BastardGhost();
 		allocator<BastardGhost>().deallocate(*it,1);
 		*it = NULL;
 	}
@@ -1238,7 +1238,7 @@ void MRAG_BBInfoCreator<WaveletsType, BlockType>::_resolveBastardGhosts(
 	{
 		for(typename GhostMap::iterator itM = itV->begin(); itM!=itV->end(); itM++)
 		{
-			allocator<BastardGhost>().destroy(itM->second);
+			itM->second->~BastardGhost();
 			allocator<BastardGhost>().deallocate(itM->second,1);
 			
 			itM->second = NULL;

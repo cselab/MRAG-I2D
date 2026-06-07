@@ -57,8 +57,8 @@ protected:
 	{ 
 		if (t != NULL)
 		{
-			allocator<T>().destroy(t);
-			allocator<T>().deallocate(t,1); 
+			t->~T();
+			allocator<T>().deallocate(t,1);
 		}
 		t = NULL; 
 	}
@@ -136,7 +136,7 @@ public:
 
 			m_cacheBlock = allocator< Matrix3D<ElementType,  true, _MRAG_BLOCKLAB_ALLOCATOR> >().allocate(1);
 			
-			allocator< Matrix3D<ElementType,  true, _MRAG_BLOCKLAB_ALLOCATOR> >().construct(m_cacheBlock, Matrix3D<ElementType,  true, _MRAG_BLOCKLAB_ALLOCATOR> ());
+			new (m_cacheBlock) Matrix3D<ElementType,  true, _MRAG_BLOCKLAB_ALLOCATOR>();
 			
 			m_cacheBlock->_Setup(BlockType::sizeX + m_stencilEnd[0] - m_stencilStart[0] -1,
 								 BlockType::sizeY + m_stencilEnd[1] - m_stencilStart[1] -1,

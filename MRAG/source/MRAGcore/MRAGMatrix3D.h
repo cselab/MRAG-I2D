@@ -30,7 +30,7 @@ public:
 			if (!bPrimitiveType)
 			{
 				for(int i=0; i<m_nElements; i++)
-					alloc.destroy(m_pData+i);
+					(m_pData+i)->~DataType();
 			}
 			
 			alloc.deallocate(m_pData, m_nElements);
@@ -59,7 +59,7 @@ public:
 		if (!bPrimitiveType)
 		{
 			for(int i=0; i<m_nElements; i++)
-				alloc.construct(m_pData+i, DataType());
+				new (m_pData+i) DataType(DataType());
 		}
 	}
 

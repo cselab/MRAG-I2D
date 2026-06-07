@@ -13,8 +13,10 @@
 //#define TBB_DO_THREADING_TOOLS 1
 #include "tbb/blocked_range.h"
 #include "tbb/parallel_for.h"
-#include "tbb/pipeline.h"
 #include "tbb/concurrent_queue.h"
+#ifdef _MRAG_TBB_PIPELINE
+#include "tbb/pipeline.h"
+#endif
 
 #include "MRAGcore/MRAGEnvironment.h"
 #pragma once
@@ -309,6 +311,7 @@ namespace MRAG
 		template <typename BlockType>
 		int BlockProcessing_TBB<BlockType>::s_nBlocks = 0;
 
+#ifdef _MRAG_TBB_PIPELINE
 #pragma mark class BlockProcessing_Pipeline_TBB
 		/**
          * Enhanced blockprocessing designed for efficient gathering.
@@ -513,6 +516,7 @@ namespace MRAG
 				_releaseBlockPointers(vInfo, c);
 			}
 		}; /* BlockProcessing_Pipeline_TBB */
+#endif
 	} /* namespace Multithreading */
 } /* namespace MRAG */
 

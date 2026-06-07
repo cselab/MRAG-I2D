@@ -110,7 +110,7 @@ protected:
 		BlockType * ptr = allocator.allocate(nElements);
 		
 		for(int i=0; i<nElements; i++)
-			allocator.construct(ptr+i, BlockType_());
+			new (ptr+i) BlockType_(BlockType_());
 		
 		return ptr;
 	}
@@ -118,7 +118,7 @@ protected:
 	virtual void _deallocate(BlockType * ptr, int nElements) const
 	{
 		for(int i=0; i<nElements; i++)
-			allocator.destroy(ptr+i);
+			(ptr+i)->~BlockType_();
 		
 		allocator.deallocate(ptr, nElements);
 	}

@@ -14,7 +14,7 @@
 #include "../MRAGcore/MRAGEnvironment.h"
 
 #ifdef	_MRAG_GLUT_VIZ
-#ifndef __apple__
+#ifndef __APPLE__
 #include "GL/glut.h"
 #else
 #include "GLUT/glut.h"

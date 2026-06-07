@@ -22,23 +22,8 @@
 #define NULL 0
 #endif
 
-#ifndef _CUDA_SIDE
-#ifndef max
-/**
- * Define preprocessor max.
- */
-// Gery-note: why not inline?
-#define max(a,b) (((a)>=(b))? (a) : (b))
-#endif
-#endif
-
-#ifndef min
-/**
- * Define preprocessor min.
- */
-// Gery-note: why not inline?
-#define min(a,b) (((a)<(b))? (a) : (b))
-#endif
+using std::max;
+using std::min;
 
 /**
  * Define a default representation for real numbers.

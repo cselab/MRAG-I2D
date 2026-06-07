@@ -122,7 +122,7 @@ class MRAG_BBInfoCreator
 			const int request_block_level = block_level + (bAnalysis?+1:-1);
 			
 			matRequests = allocator<MatrixOfRequests>().allocate(1);
-			allocator<MatrixOfRequests>().construct(matRequests,  MatrixOfRequests());
+			new (matRequests) MatrixOfRequests();
 			matRequests->_Setup(e[0]-s[0], e[1]-s[1], e[2]-s[2]);
 			
 			*matRequests = NULL;
@@ -172,7 +172,7 @@ class MRAG_BBInfoCreator
 				else
 				{
 					request = allocator<BastardGhost>().allocate(1);
-					allocator<BastardGhost>().construct(request, BastardGhost(request_block_level, i));
+					new (request) BastardGhost(request_block_level, i);
 					
 					newFront.push_back(request);
 					buffer[request_block_level - minLevel][key] = request;
@@ -278,7 +278,7 @@ class MRAG_BBInfoCreator
 		{	
 			if (matRequests!=NULL)
 			{
-				allocator<MatrixOfRequests>().destroy(matRequests);
+				matRequests->~MatrixOfRequests();
 				allocator<MatrixOfRequests>().deallocate(matRequests,1);
 			}
 			
