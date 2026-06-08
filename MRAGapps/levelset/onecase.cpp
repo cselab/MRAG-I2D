@@ -31,7 +31,7 @@
 using namespace MRAG;
 
 typedef Wavelets_AverageInterp5thOrder W;
-typedef Block<Real, 32, 32, 1>        B;
+typedef Block<Real, 8, 8, 1>        B;
 
 // LeVeque single-vortex deformation benchmark initial shape:
 // a circle of radius R0 centered at (XC,YC) in the unit square.
