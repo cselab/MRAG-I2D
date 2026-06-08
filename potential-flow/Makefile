@@ -5,13 +5,13 @@
 #   make VIZ=1      -> build with the GLUT viewer (_RL_VIZ)
 #   make run        -> build + run a sample study
 
-MRAG = ../../../../MRAG/source
-RL   = ../mattia-RL
+MRAG = ../MRAG
+RL   = ../I2D/mattia-RL
 CXX  = g++-15
 
 WARN = -Wno-deprecated -Wno-unknown-pragmas -Wno-reorder -Wno-comment
-CXXFLAGS = -std=gnu++17 -O2 -DNDEBUG -fopenmp -DGL_SILENCE_DEPRECATION $(WARN)
-INCLUDES = -I$(MRAG) -I.. -I$(RL) $(shell pkg-config --cflags tbb)
+CXXFLAGS = -std=gnu++17 -O2 -DNDEBUG -fopenmp -DGL_SILENCE_DEPRECATION $(WARN) -include cstring -include cassert
+INCLUDES = -I$(MRAG) -I../I2D -I$(RL) $(shell pkg-config --cflags tbb)
 
 # scalable_allocator lives in libtbbmalloc; tbb.pc only lists -ltbb
 TBB_LIBS   = $(shell pkg-config --libs tbb) -ltbbmalloc
@@ -47,7 +47,7 @@ run: pf factoryPF
 	DYLD_LIBRARY_PATH=$(TBB_LIBDIR) ./pf $(STUDY)
 
 factoryPF:
-	cp ../../launch/factoryPF factoryPF
+	cp ../I2D/launch/factoryPF factoryPF
 
 clean:
 	rm -f pf
