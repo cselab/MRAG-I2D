@@ -16,7 +16,6 @@ FMM_SRC = mani-fmm2d/binomial.cpp mani-fmm2d/precompute.cpp
 RL_SRC  = mattia-RL/RL_QLearning.cpp mattia-RL/RL_MultiTable.cpp mattia-RL/rng.cpp
 CORE    = $(MRAG)/MRAGcore/MRAGWavelets_StaticData.cpp \
           $(MRAG)/MRAGcore/MRAGBoundaryBlockInfo.cpp \
-          $(MRAG)/MRAGcore/MRAGProfiler.cpp \
           $(MRAG)/MRAGcore/QtBox.cpp \
           $(MRAG)/MRAGcore/QuadTree.cpp
 

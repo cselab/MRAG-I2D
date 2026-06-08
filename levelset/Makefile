@@ -4,8 +4,7 @@ TBB_LIBS   = $(shell pkg-config --libs tbb) -ltbbmalloc
 TBB_LIBDIR = $(shell pkg-config --variable=libdir tbb)
 CORE_CPP = \
   $(SRC_MRAG)/MRAGcore/MRAGWavelets_StaticData.cpp \
-  $(SRC_MRAG)/MRAGcore/MRAGBoundaryBlockInfo.cpp \
-  $(SRC_MRAG)/MRAGcore/MRAGProfiler.cpp
+  $(SRC_MRAG)/MRAGcore/MRAGBoundaryBlockInfo.cpp
 onecase: onecase.cpp $(CORE_CPP)
 	$(CXX) $(CXXFLAGS) -I$(SRC_MRAG) $(TBB_FLAGS) -o $@ $^ $(TBB_LIBS)
 run: onecase

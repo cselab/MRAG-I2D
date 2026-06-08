@@ -28,7 +28,6 @@ PF_SRC = PF_main.cpp PF_Agent.cpp PF_AgentVector.cpp PF_Dipole.cpp \
 RL_SRC = $(RL)/RL_QLearning.cpp $(RL)/RL_MultiTable.cpp $(RL)/rng.cpp
 CORE   = $(MRAG)/MRAGcore/MRAGWavelets_StaticData.cpp \
          $(MRAG)/MRAGcore/MRAGBoundaryBlockInfo.cpp \
-         $(MRAG)/MRAGcore/MRAGProfiler.cpp \
          $(MRAG)/MRAGcore/QtBox.cpp \
          $(MRAG)/MRAGcore/QuadTree.cpp
 

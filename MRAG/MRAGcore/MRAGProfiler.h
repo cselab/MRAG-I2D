@@ -60,8 +60,20 @@ class ProfileAgent {
   int m_nMeasurements;
   int m_nMoney;
 
-  static void _getTime(ClockTime &time);
-  static float _getElapsedTime(const ClockTime &tS, const ClockTime &tE);
+  static void _getTime(ClockTime &time) {
+#ifdef _MRAG_TBB
+    time = tbb::tick_count::now();
+#else
+    time = clock();
+#endif
+  }
+  static float _getElapsedTime(const ClockTime &tS, const ClockTime &tE) {
+#ifdef _MRAG_TBB
+    return (tE - tS).seconds();
+#else
+    return (tE - tS) / (double)CLOCKS_PER_SEC;
+#endif
+  }
 
   void _reset() {
     m_tStart = ClockTime();
