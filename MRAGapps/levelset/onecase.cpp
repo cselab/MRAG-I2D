@@ -99,8 +99,7 @@ int main(int argc, char** argv)
 		char name[64];
 		sprintf(name, "phi.%04d", step);
 		IO_XDMF<W, B> xdmf;
-		xdmf.Write(grid, name, "phi", t, step);
-		frames.push_back(std::string(name) + ".xdmf2");
+		frames.push_back(xdmf.Write(grid, name, "phi", t, step));
 	}
 
 	IO_XDMF<W, B>::WriteTemporalMaster("phi", frames);
