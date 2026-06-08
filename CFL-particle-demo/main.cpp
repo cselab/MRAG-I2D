@@ -8,8 +8,8 @@
  */
 #include <stdlib.h>
 #include <iostream>
-#include "../MRAGcore/MRAGCommon.h"
-#include "../MRAGcore/MRAGEnvironment.h"
+#include "../MRAG/MRAGcore/MRAGCommon.h"
+#include "../MRAG/MRAGcore/MRAGEnvironment.h"
 
 #if _MRAG_OS == _MRAG_OS_APPLE
 #if defined(_MRAG_GLUT_VIZ) && defined(__APPLE__)
