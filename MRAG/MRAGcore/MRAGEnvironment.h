@@ -9,14 +9,8 @@
 namespace MRAG {
 
 // OS STUFF
-#define _MRAG_OS_WINDOWS _WIN32
 #define _MRAG_OS_APPLE __APPLE__
-
-#ifdef _WIN32
-#define _MRAG_OS _MRAG_OS_WINDOWS
-#else
 #define _MRAG_OS _MRAG_OS_APPLE
-#endif
 
 // VIZ STUFF
 // #define _MRAG_GLUT_VIZ

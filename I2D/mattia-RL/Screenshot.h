@@ -3,16 +3,8 @@
  *
  */
 #pragma once
-
 #include "RL_Environment.h"
-
 #ifdef _RL_VIZ
-
-#ifdef _WIN32
-#include "windows.h"
-#include "GL/gl.h"
-#endif
-
 #ifdef __APPLE__
 #include "GLUT/glut.h"
 #endif

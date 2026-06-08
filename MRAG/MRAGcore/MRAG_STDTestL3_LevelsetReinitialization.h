@@ -15,10 +15,6 @@
 
 #if _MRAG_OS == _MRAG_OS_APPLE
 #include "GLUT/glut.h"
-#elif _MRAG_OS == _MRAG_OS_WINDOWS
-#define _USE_MATH_DEFINES
-#include "GL/glew.h"
-#include "GL/glut.h"
 #endif
 
 #undef min

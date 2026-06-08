@@ -12,13 +12,7 @@
 #include <vector>
 using namespace std;
 #include <assert.h>
-
-#ifdef _WIN32
-#define ALIGN_ATTRIBUTE __declspec(align(16))
-//
-#else
 #define ALIGN_ATTRIBUTE __attribute__((aligned(16)))
-#endif
 
 template <int _sizeX, int _sizeY, int _nDim = 2>
 struct ALIGN_ATTRIBUTE I2D_Layer {
