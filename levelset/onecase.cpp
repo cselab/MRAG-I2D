@@ -73,6 +73,5 @@ int main(int argc, char **argv) {
     frames.push_back(xdmf.Write(grid, name, t, step, names));
   }
   IO_XDMF<W, B>::WriteTemporalMaster("phi", frames);
-  printf("done: %d frames; open phi.xdmf2 in ParaView\n", nsteps);
   return 0;
 }
