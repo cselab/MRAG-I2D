@@ -116,12 +116,7 @@ def main():
         prefix = "%s.%04d" % (a.out, i)
         dump_raws(prefix, xy, seg, attr)
         frames.append((os.path.basename(prefix), len(seg), len(xy), time))
-        print("%s [%s] iso=%g: %d segments, %d verts"
-              % (os.path.basename(geom), name, a.iso, len(seg), len(xy)))
-
     dump_master(a.out, frames)
-    print("-> %s.xdmf2 (%d frames)" % (a.out, len(frames)))
-
 
 if __name__ == "__main__":
     main()
