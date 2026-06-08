@@ -35,10 +35,10 @@ template <typename T, int i> inline Real scalar_projector_impl(const T &t) {
 }
 make_projector(WARP_projector, scalar_projector_impl)
 
-static const int blockSize = 16;
+static const int blockSize = 8;
 static const int nBlocks = 4;
 static const int maxLevel = 4;
-static const int resJump = 2;
+static const int resJump = 1;
 static const int maxStencil[2][3] = {-3, -3, 0, +4, +4, 1};
 static const double ctol = 5e-5;
 static const double rtol = ctol / 10;
@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
   const int nsteps = 20;
   const double frameDt = 0.05;
 
-  Environment::setup();
+  Environment::setup(argc > 1 ? atoi(argv[1]) : -1);
 
   Grid<W, B> grid(nBlocks, nBlocks, 1, maxStencil);
   Refiner_SpaceExtension refiner(resJump);
