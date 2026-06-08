@@ -14,6 +14,7 @@
 #include "MRAGSimpleLevelsetBlock.h"
 #include "MRAGScienceCore.h"
 #include "MRAG_IO_XDMF.h"
+#include "MRAG_IO_Blocks.h"
 
 using namespace MRAG;
 
@@ -72,6 +73,7 @@ int main(int argc, char **argv) {
   BlockFWT<W, B, ls_projector> blockfwt;
 
   std::vector<IO_XDMF<W, B>::Frame> frames;
+  std::vector<IO_Blocks<W, B>::Frame> bframes;
   for (int step = 0; step < nsteps; step++) {
     const double t = (double)step / nsteps;
     XC = 0.5 + 0.2 * std::cos(2.0 * M_PI * t);
@@ -89,7 +91,12 @@ int main(int argc, char **argv) {
     const char *names[] = {"phi"};
     IO_XDMF<W, B> xdmf;
     frames.push_back(xdmf.Write(grid, name, t, step, names));
+
+    char bname[64];
+    sprintf(bname, "blocks.%04d", step);
+    bframes.push_back(IO_Blocks<W, B>::Write(grid, bname, t));
   }
   IO_XDMF<W, B>::WriteTemporalMaster("phi", frames);
+  IO_Blocks<W, B>::WriteTemporalMaster("blocks", bframes);
   return 0;
 }
