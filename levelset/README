@@ -1,0 +1,14 @@
+LeVeque reversing-vortex level set on a wavelet-adaptive MRAG grid.
+
+Compile
+    make
+
+Run (writes phi.NNNN.xdmf2 + .raw)
+    make run
+
+Iso-line postprocessing (amriso)
+    python3 -m pip install --user git+https://github.com/cselab/amriso
+    ./post.py phi.xdmf2 --out iso
+
+View
+    paraview phi.xdmf2 iso.xdmf2
