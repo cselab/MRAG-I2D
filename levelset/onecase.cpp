@@ -1,16 +1,3 @@
-/*
- * onecase.cpp — minimal SERIAL driver for the MRAG-I2D wavelet
- * multiresolution core (no TBB, no GLUT, no I2D vortex solver).
- *
- * What it demonstrates: the wavelet-detail refinement criterion that IS the
- * grid in ppm/c. We put a level-set (signed-distance) circle on a coarse
- * block grid, then let Science::AutomaticRefinement drive a fast wavelet
- * transform per block and refine wherever the detail coefficient exceeds a
- * threshold. The result is a grid whose fine cells track the interface.
- *
- * Build serially with -D_MRAG_SERIAL (see the Makefile here).
- */
-
 #include <cmath>
 #include <cstdio>
 #include <vector>
@@ -32,25 +19,14 @@ using namespace MRAG;
 
 typedef Wavelets_AverageInterp5thOrder W;
 typedef Block<Real, 8, 8, 1> B;
-
-// LeVeque single-vortex deformation benchmark initial shape:
-// a circle of radius R0 centered at (XC,YC) in the unit square.
 static const double R0 = 0.15;
 static double XC = 0.5;
 static double YC = 0.75;
-
-// Smoothed-indicator "color" function: ~1 inside the circle, ~0 outside, with
-// a sharp transition AT the interface. This is the quantity the LeVeque
-// deformation benchmark advects, and it makes the wavelet detail coefficients
-// localize on the zero contour (the field is flat away from the interface, so
-// the refinement criterion only fires in the thin band around r=R0).
 static inline double phi0(double x, double y) {
   const double d = std::sqrt((x - XC) * (x - XC) + (y - YC) * (y - YC)) - R0;
   const double eps = 0.02; // transition half-width (a few finest cells)
   return 0.5 * (1.0 - std::tanh(d / eps));
 }
-
-// fill the (possibly just-refined) grid with the initial level set
 static void _ic(Grid<W, B> &grid) {
   std::vector<BlockInfo> vInfo = grid.getBlocksInfo();
   for (int i = 0; i < (int)vInfo.size(); i++) {
@@ -65,7 +41,6 @@ static void _ic(Grid<W, B> &grid) {
       }
   }
 }
-
 int main(int argc, char **argv) {
   const int nBlocks = 4;
   const double tol = 1e-3;
@@ -97,7 +72,6 @@ int main(int argc, char **argv) {
     IO_XDMF<W, B> xdmf;
     frames.push_back(xdmf.Write(grid, name, t, step, names));
   }
-
   IO_XDMF<W, B>::WriteTemporalMaster("phi", frames);
   printf("done: %d frames; open phi.xdmf2 in ParaView\n", nsteps);
   return 0;
