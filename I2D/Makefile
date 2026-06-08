@@ -5,7 +5,7 @@
 #   make -f Makefile.i2d            -> build ./i2d
 #   make -f Makefile.i2d run        -> build + run a short advection study
 
-MRAG = ../../MRAG/source
+MRAG = ../MRAG/source
 CXX  = g++-15
 
 DEFS = -D_BLOCKSIZE_=32 -D_ORDER_=12 -D_FMM_MAX_LEVEL_=9 -D_SMAX=200 \

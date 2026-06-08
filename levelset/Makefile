@@ -1,4 +1,4 @@
-SRC_MRAG = ../../MRAG/source
+SRC_MRAG = ../MRAG/source
 TBB_FLAGS  = $(shell pkg-config --cflags tbb)
 TBB_LIBS   = $(shell pkg-config --libs tbb) -ltbbmalloc
 TBB_LIBDIR = $(shell pkg-config --variable=libdir tbb)
