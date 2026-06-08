@@ -5,13 +5,12 @@
 #   make -f Makefile.i2d            -> build ./i2d
 #   make -f Makefile.i2d run        -> build + run a short advection study
 
-MRAG = ../MRAG/source
+MRAG = ../MRAG
 CXX  = g++-15
 
 DEFS = -D_BLOCKSIZE_=32 -D_ORDER_=12 -D_FMM_MAX_LEVEL_=9 -D_SMAX=200 \
        -D_FMM_MIXEDPREC_KERNELS_ -D_FMM_NOPRECDIV_KERNELS_
-WARN = -Wno-deprecated -Wno-unknown-pragmas -Wno-reorder -Wno-comment
-CXXFLAGS = -std=gnu++17 -O2 -DNDEBUG -fopenmp -DGL_SILENCE_DEPRECATION $(DEFS) $(WARN)
+CXXFLAGS = -std=gnu++17 -O2 -DNDEBUG -fopenmp -DGL_SILENCE_DEPRECATION $(DEFS)
 INCLUDES = -Isse-compat -I/opt/homebrew/include -I$(MRAG) -I. -I./mani-fmm2d -I./mattia-RL \
            $(shell pkg-config --cflags tbb)
 

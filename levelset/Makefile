@@ -1,4 +1,4 @@
-SRC_MRAG = ../git MRAG/source
+SRC_MRAG = ../MRAG
 TBB_FLAGS  = $(shell pkg-config --cflags tbb)
 TBB_LIBS   = $(shell pkg-config --libs tbb) -ltbbmalloc
 TBB_LIBDIR = $(shell pkg-config --variable=libdir tbb)
