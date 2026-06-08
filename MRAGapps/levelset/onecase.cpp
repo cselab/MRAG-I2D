@@ -26,6 +26,7 @@
 #include "MRAGcore/MRAGBlockFWT.h"
 #include "MRAGcore/MRAGWavelets_AverageInterp5thOrder.h"
 #include "MRAGscience/MRAGScienceCore.h"
+#include "MRAGio/MRAG_IO_XDMF.h"
 
 using namespace MRAG;
 
@@ -135,6 +136,10 @@ int main(int argc, char** argv)
 	Science::AutomaticRefinement<0, 0>(grid, blockfwt, tol, maxLevel, -1, NULL, _ic);
 	_report(grid, "refined");
 	_dump(grid, "phi_refined.txt");
+
+	// real ParaView output: XDMF descriptor + raw binary (no VTK/HDF5 needed)
+	IO_XDMF<Grid<W, B> > xdmf;
+	xdmf.Write(grid, "phi_refined", "phi");
 
 	// NOTE: Science::AutomaticCompression is intentionally not called here.
 	// It does not terminate for this case: grid.compress() refuses to collapse

@@ -11,5 +11,5 @@ onecase: onecase.cpp $(CORE_CPP)
 run: onecase
 	DYLD_LIBRARY_PATH=$(TBB_LIBDIR) ./onecase
 clean:
-	rm -f onecase
+	rm -f onecase phi_refined.txt phi_refined.xdmf2 phi_refined.xyz.raw phi_refined.phi.raw
 .PHONY: run clean
