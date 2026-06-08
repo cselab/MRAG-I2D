@@ -24,30 +24,30 @@
 #undef min
 #undef max
 
-#include "../MRAGcore/MRAGWavelets_AverageInterp5thOrder.h"
-#include "../MRAGcore/MRAGWavelets_Interp4thOrder.h"
-#include "../MRAGcore/MRAGWavelets_AverageInterp3rdOrder.h"
-#include "../MRAGcore/MRAGWavelets_Interp2ndOrder.h"
-#include "../MRAGcore/MRAGWavelets_Haar.h"
-#include "../MRAGcore/MRAGBlock.h"
-#include "../MRAGcore/MRAGrid.h"
-#include "../MRAGcore/MRAGRefiner.h"
-#include "../MRAGcore/MRAGCompressor.h"
-#include "../MRAGcore/MRAGBlockLab.h"
-#include "../MRAGcore/MRAGBlockFWT.h"
+#include "../MRAG/MRAGcore/MRAGWavelets_AverageInterp5thOrder.h"
+#include "../MRAG/MRAGcore/MRAGWavelets_Interp4thOrder.h"
+#include "../MRAG/MRAGcore/MRAGWavelets_AverageInterp3rdOrder.h"
+#include "../MRAG/MRAGcore/MRAGWavelets_Interp2ndOrder.h"
+#include "../MRAG/MRAGcore/MRAGWavelets_Haar.h"
+#include "../MRAG/MRAGcore/MRAGBlock.h"
+#include "../MRAG/MRAGcore/MRAGrid.h"
+#include "../MRAG/MRAGcore/MRAGRefiner.h"
+#include "../MRAG/MRAGcore/MRAGCompressor.h"
+#include "../MRAG/MRAGcore/MRAGBlockLab.h"
+#include "../MRAG/MRAGcore/MRAGBlockFWT.h"
 
 #ifdef _MRAG_GLUT_VIZ
-#include "../MRAGvisual/GridViewer.h"
+#include "../MRAG/MRAGvisual/GridViewer.h"
 #endif
 
-#include "../MRAGscience/MRAGScienceCore.h"
-#include "../MRAGscience/MRAGAutomaticRefiner.h"
-#include "../MRAGscience/MRAGSimpleLevelsetBlock.h"
-#include "../MRAGscience/MRAGSpaceTimeSorter.h"
-#include "../MRAGscience/MRAGRefiner_SpaceExtension.h"
+#include "../MRAG/MRAGscience/MRAGScienceCore.h"
+#include "../MRAG/MRAGscience/MRAGAutomaticRefiner.h"
+#include "../MRAG/MRAGscience/MRAGSimpleLevelsetBlock.h"
+#include "../MRAG/MRAGscience/MRAGSpaceTimeSorter.h"
+#include "../MRAG/MRAGscience/MRAGRefiner_SpaceExtension.h"
 
-#include "../MRAGmultithreading/MRAGBlockProcessing_SingleCPU.h"
-#include "../MRAGmultithreading/MRAGBlockProcessing_TBB.h"
+#include "../MRAG/MRAGmultithreading/MRAGBlockProcessing_SingleCPU.h"
+#include "../MRAG/MRAGmultithreading/MRAGBlockProcessing_TBB.h"
 
 using namespace MRAG;
 
