@@ -61,7 +61,8 @@ void I2D_TestAdvection::run()
 {	
 	char buf[500];
 	sprintf(buf, "advection_%04d", step_id);
-	//if (step_id%parser("-dumpfreq").asInt()==0 ) _dump(buf);
+	const int dumpfreq = parser("-dumpfreq").asInt();
+	if (dumpfreq > 0 && step_id % dumpfreq == 0) _dump(buf);
 
 	_refine(false);
 
@@ -195,6 +196,8 @@ void I2D_TestAdvection::_ic_velocity(Grid<W,B>& grid)
 
 void I2D_TestAdvection::_dump(string filename)
 {
-	IO_VTKNative<W,B, 4,0> vtkdumper;
-	vtkdumper.Write(*grid, grid->getBoundaryInfo(), filename);
+	static const char* names[] = { "omega", "u", "v", "tmp" };
+	IO_XDMF<W,B, 4,0> dumper;
+	dumpframes.push_back(dumper.Write(*grid, filename, (double)step_id, step_id, names));
+	IO_XDMF<W,B, 4,0>::WriteTemporalMaster("advection", dumpframes);
 }

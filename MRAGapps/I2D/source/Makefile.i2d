@@ -33,12 +33,12 @@ i2d: $(I2D_SRC) $(FMM_SRC) $(RL_SRC) $(CORE)
 
 # short advection study (level-set / scalar advection on the adapted grid)
 ADV = -study advection -nsteps 50 -nthreads 1 -bpd 8 -lmax 4 \
-      -rtol 1e-4 -ctol 1e-5 -dumpfreq 1000 -jump 1 -particles 0 -uniform 0
+      -rtol 1e-4 -ctol 1e-5 -dumpfreq 5 -jump 1 -particles 0 -uniform 0
 
 run: i2d
 	DYLD_LIBRARY_PATH=$(TBB_LIBDIR) ./i2d $(ADV)
 
 clean:
-	rm -f i2d
+	rm -f i2d advection.xdmf2 advection_*.xdmf2 advection_*.raw
 
 .PHONY: run clean

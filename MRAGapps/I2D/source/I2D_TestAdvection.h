@@ -12,20 +12,23 @@
 #include "I2D_Headers.h"
 #include "I2D_Types.h"
 #include "I2D_AdvectionOperator.h"
+#include "MRAGio/MRAG_IO_XDMF.h"
 
 
 class I2D_TestAdvection: public I2D_Test
 {
 	ArgumentParser parser;
-	
+
 	Grid<W,B> * grid;
 	Refiner * refiner;
 	Compressor * compressor;
-	
+
 	BlockFWT<W, B, vorticity_projector, false, 1> fwt_omega;
-	
+
 	I2D_AdvectionOperator * advection;
-	
+
+	std::vector<IO_XDMF<W,B,4,0>::Frame> dumpframes;
+
 	set<int> _getBoundaryBlockIDs();
 	void _dump(string filename);
 	static void _ic_omega(Grid<W,B>& grid);
