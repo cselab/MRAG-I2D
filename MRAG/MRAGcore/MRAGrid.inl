@@ -762,7 +762,6 @@ Grid<WaveletType, BlockType>::getBoundaryInfo(int *output_stencil_start,
   // 3.
   if (m_setInvalidBBInfo.size() == 0)
     return m_boundaryInfo;
-  printf("Found %ld invalid blocks\n", m_setInvalidBBInfo.size());
 
   // 4.
   vector<GridNode *> vNodes(m_setInvalidBBInfo.size());
