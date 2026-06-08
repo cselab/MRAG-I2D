@@ -1,10 +1,5 @@
 Vorticity evolution on a wavelet-adaptive MRAG grid.
 
-WARP adaptive particle solver (blockprocessingWARP.h): a Gaussian vortex is advected
-(RK3 + MP4 remesh) in the prescribed LeVeque single-vortex deformation field, which
-winds it into a spiral filament; the grid re-adapts each step by wavelet detail
-(hysteresis rtol=ctol/10, Refiner_SpaceExtension) and refines along the filament.
-
 Compile
     make
 

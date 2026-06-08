@@ -42,7 +42,6 @@ static const int resJump = 2;
 static const int maxStencil[2][3] = {-3, -3, 0, +4, +4, 1};
 static const double ctol = 5e-5;
 static const double rtol = ctol / 10;
-static const double SIGMA = 0.06;
 
 typedef Wavelets_Interp4thOrder W;
 struct WARPBlock : public Block<PS, blockSize, blockSize, 1> {
@@ -66,8 +65,12 @@ static void _ic(Grid<W, B> &grid) {
         float x[3];
         info.pos(x, ix, iy, 0);
         PS &p = block(ix, iy, 0);
-        const double r2 = (x[0] - 0.5) * (x[0] - 0.5) + (x[1] - 0.75) * (x[1] - 0.75);
-        p.w = std::exp(-0.5 * r2 / (SIGMA * SIGMA));
+        const double r1 = std::sqrt(0.25 * (x[0] - 0.5) * (x[0] - 0.5) +
+                                    (x[1] - 0.5) * (x[1] - 0.5));
+        const double eps = 0.1;
+        const double alpha =
+            M_PI * std::min(1.0, std::max(0.0, (r1 - 0.15 + 0.5 * eps) / eps));
+        p.w = 0.5 + 0.5 * std::cos(alpha);
         const double px = M_PI * x[0], py = M_PI * x[1];
         p.u[0] = -2.0 * std::sin(px) * std::sin(px) * std::sin(py) * std::cos(py);
         p.u[1] = 2.0 * std::sin(py) * std::sin(py) * std::sin(px) * std::cos(px);
