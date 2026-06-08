@@ -11,4 +11,4 @@ Iso-line postprocessing (amriso)
     ./post.py omega.xdmf2 --iso 0.5 --out iso
 
 View
-    paraview omega.xdmf2 iso.xdmf2
+    paraview blocks.xdmf2 omega.xdmf2 iso.xdmf2
