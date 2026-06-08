@@ -15,6 +15,7 @@
 #include "MRAGScienceCore.h"
 #include "MRAGBlockProcessing_TBB.h"
 #include "MRAG_IO_XDMF.h"
+#include "MRAG_IO_Blocks.h"
 
 using namespace MRAG;
 
@@ -99,6 +100,7 @@ int main(int argc, char **argv) {
 
   double t = 0;
   std::vector<IO_XDMF<W, B>::Frame> frames;
+  std::vector<IO_Blocks<W, B>::Frame> bframes;
   for (int step = 0; step < nsteps; step++) {
     Science::AutomaticRefinement<0, 0>(grid, blockfwt, rtol, maxLevel, -1);
 
@@ -133,9 +135,15 @@ int main(int argc, char **argv) {
     const char *names[] = {"omega"};
     IO_XDMF<W, B> xdmf;
     frames.push_back(xdmf.Write(grid, name, t, step, names));
+
+    char bname[64];
+    sprintf(bname, "blocks.%04d", step);
+    bframes.push_back(IO_Blocks<W, B>::Write(grid, bname, t));
+
     printf("step %d t=%.4f blocks=%zu\n", step, t,
            grid.getBlocksInfo().size());
   }
   IO_XDMF<W, B>::WriteTemporalMaster("omega", frames);
+  IO_Blocks<W, B>::WriteTemporalMaster("blocks", bframes);
   return 0;
 }
