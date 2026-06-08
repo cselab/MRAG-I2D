@@ -49,22 +49,25 @@ int main(int argc, char **argv) {
 
   Environment::setup();
 
+  Grid<W, B> grid(nBlocks, nBlocks, 1);
+  Refiner refiner;
+  Compressor compressor;
+  grid.setRefiner(&refiner);
+  grid.setCompressor(&compressor);
+  BlockFWT<W, B> blockfwt;
+
   std::vector<IO_XDMF<W, B>::Frame> frames;
   for (int step = 0; step < nsteps; step++) {
     const double t = (double)step / nsteps;
     XC = 0.5 + 0.2 * std::cos(2.0 * M_PI * t);
     YC = 0.5 + 0.2 * std::sin(2.0 * M_PI * t);
 
-    Grid<W, B> grid(nBlocks, nBlocks, 1);
-    Refiner refiner;
-    Compressor compressor;
-    grid.setRefiner(&refiner);
-    grid.setCompressor(&compressor);
-    BlockFWT<W, B> blockfwt;
-
     _ic(grid);
     Science::AutomaticRefinement<0, 0>(grid, blockfwt, tol, maxLevel, -1, NULL,
                                        _ic);
+    Science::AutomaticCompression<0, 0>(grid, blockfwt, tol);
+    printf("  step %d: grid has %zu blocks after refine+compress\n", step,
+           grid.getBlocksInfo().size());
 
     char name[64];
     sprintf(name, "phi.%04d", step);

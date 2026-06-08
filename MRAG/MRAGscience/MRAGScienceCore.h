@@ -204,7 +204,7 @@ int AutomaticCompression(Grid &g, BlockFWT &fwt,
 
     if (profiler != NULL)
       profiler->getAgent("AutoCompr::compress").start();
-    int nCollapsed;
+    int nCollapsed = 0;
     g.compress(shouldBeCompressed, nCollapsed);
 
     if (profiler != NULL)
@@ -221,10 +221,6 @@ int AutomaticCompression(Grid &g, BlockFWT &fwt,
 
     if (nCollapsed == 0)
       break;
-
-    printf("AutomaticCompression:: Compressed %d, FWT skipped blocks:%d\n",
-           nCollapsed, nSkippedBlocks);
-
     nTotalCollapsed += nCollapsed;
 
     loopCounter++;
@@ -285,7 +281,7 @@ int AutomaticCompressionForLevelsets(Grid &g, BlockFWT &fwt,
 
     if (profiler != NULL)
       profiler->getAgent("AutoCompr::compress").start();
-    int nCollapsed;
+    int nCollapsed = 0;
     g.compress(shouldBeCompressed, nCollapsed);
     if (profiler != NULL)
       profiler->getAgent("AutoCompr::compress").stop(nCollapsed);
@@ -298,10 +294,6 @@ int AutomaticCompressionForLevelsets(Grid &g, BlockFWT &fwt,
 
     if (nCollapsed == 0)
       break;
-
-    printf("AutomaticCompression:: Compressed %d, FWT skipped blocks:%d\n",
-           nCollapsed, nSkippedBlocks);
-
     nTotalCollapsed += nCollapsed;
 
     loopCounter++;

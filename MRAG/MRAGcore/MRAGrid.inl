@@ -607,6 +607,10 @@ Grid<WaveletType, BlockType>::compress(const set<int> &blocksToCompress,
 
   if (plan->nCollapses == 0) {
     printf("grid.compress : plan->nCollapses == 0,  returning early\n");
+    nCollapsedBlocks = 0; // honor the out-param contract on the early return;
+                          // otherwise AutomaticCompression reads it uninitialized
+                          // and its do/while(nCollapsed!=0) loop never terminates
+    delete plan;
     return CompressionResult();
   }
 
