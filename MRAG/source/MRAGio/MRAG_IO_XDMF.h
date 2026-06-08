@@ -39,7 +39,7 @@ namespace MRAG
 
 			const std::string xdmfPath = fileName + ".xdmf2";
 			FILE* xdmf = fopen(xdmfPath.c_str(), "w");
-			if (xdmf == NULL) { printf("IO_XDMF: cannot open %s\n", xdmfPath.c_str()); return; }
+			if (xdmf == NULL) { printf("IO_XDMF: cannot open %s\n", xdmfPath.c_str()); return Frame(); }
 			fprintf(xdmf,
 			        "<Xdmf\n    Version=\"2.0\">\n"
 			        "  <Domain>\n"
