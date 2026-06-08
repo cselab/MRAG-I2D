@@ -63,8 +63,7 @@ int main(int argc, char **argv) {
     YC = 0.5 + 0.2 * std::sin(2.0 * M_PI * t);
 
     _ic(grid);
-    Science::AutomaticRefinement<0, 0>(grid, blockfwt, tol, maxLevel, -1, NULL,
-                                       _ic);
+    Science::AutomaticRefinement<0, 0>(grid, blockfwt, tol, maxLevel, -1, _ic);
     Science::AutomaticCompression<0, 0>(grid, blockfwt, tol);
     printf("  step %d: grid has %zu blocks after refine+compress\n", step,
            grid.getBlocksInfo().size());

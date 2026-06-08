@@ -406,7 +406,7 @@ void I2D_Axisymmetrization::_refine(bool bUseIC) {
       ((Refiner_BlackList *)refiner)->set_blacklist(&boundary_blocks);
 
       const int refinements = Science::AutomaticRefinement<0, 0>(
-          *grid, fwt_omega, RTOL, LMAX, 1, NULL, (void (*)(Grid<W, B> &))NULL,
+          *grid, fwt_omega, RTOL, LMAX, 1, (void (*)(Grid<W, B> &))NULL,
           &boundary_blocks);
 
       _ic(*grid);
@@ -419,7 +419,7 @@ void I2D_Axisymmetrization::_refine(bool bUseIC) {
       ((Refiner_BlackList *)refiner)->set_blacklist(&boundary_blocks);
 
       const int refinements = Science::AutomaticRefinement<0, 0>(
-          *grid, fwt_omega, RTOL, LMAX, 1, NULL, (void (*)(Grid<W, B> &))NULL,
+          *grid, fwt_omega, RTOL, LMAX, 1, (void (*)(Grid<W, B> &))NULL,
           &boundary_blocks);
 
       if (refinements == 0)
@@ -433,7 +433,7 @@ void I2D_Axisymmetrization::_refine(bool bUseIC) {
       ((Refiner_BlackList *)refiner)->set_blacklist(&boundary_blocks);
 
       const int refinements = Science::AutomaticRefinement<0, 1>(
-          *grid, fwt_velocity, RTOL, LMAX, 1, NULL,
+          *grid, fwt_velocity, RTOL, LMAX, 1,
           (void (*)(Grid<W, B> &))NULL, &boundary_blocks);
 
       if (refinements == 0)
@@ -449,10 +449,10 @@ void I2D_Axisymmetrization::_compress(bool bUseIC) {
 
   // omega AND velocity
   if (!bREFINEOMEGAONLY)
-    Science::AutomaticCompression<0, 3>(*grid, fwt_wuvx, CTOL, 1, NULL,
+    Science::AutomaticCompression<0, 3>(*grid, fwt_wuvx, CTOL, 1,
                                         (void (*)(Grid<W, B> &))NULL);
   else
-    Science::AutomaticCompression<0, 0>(*grid, fwt_omega, CTOL, 1, NULL,
+    Science::AutomaticCompression<0, 0>(*grid, fwt_omega, CTOL, 1,
                                         (void (*)(Grid<W, B> &))NULL);
 }
 
@@ -549,17 +549,13 @@ void I2D_Axisymmetrization::run() {
 
   while (true) {
     printf("REFINING..\n");
-    profiler.push_start("REF");
     _refine(false);
-    profiler.pop_stop();
     printf("DONE WITH REFINEMENT\n");
 
     for (int i = 0; i < ADAPTFREQ; i++) {
       printf("INIT STEP\n");
 
-      profiler.push_start("VEL");
       velsolver->compute_velocity();
-      profiler.pop_stop();
       printf("DONE WITH COMPUTE VELOCITY\n");
 
       Real tnext, tnext_dump, tend;
@@ -567,9 +563,7 @@ void I2D_Axisymmetrization::run() {
       const Real dt = tnext - t;
       printf("DONE WITH TNEXT\n");
 
-      profiler.push_start("ADV");
       advection->perform_timestep(dt);
-      profiler.pop_stop();
       printf("DONE WITH ADVECTION\n");
 
       t = tnext;
@@ -609,8 +603,6 @@ void I2D_Axisymmetrization::run() {
       printf("END TIME STEP (%d over %d)\n", i, ADAPTFREQ);
     }
 
-    profiler.printSummary();
-
     if (step_id % SAVEFREQ == 0) {
       printf("SAVING...\n");
       _save();
@@ -620,9 +612,7 @@ void I2D_Axisymmetrization::run() {
     diagnostics.compute(*grid, t);
 
     printf("COMPRESS..\n");
-    profiler.push_start("COMPRESS");
     _compress(false);
-    profiler.pop_stop();
     printf("DONE WITH COMPRESS\n");
   }
 }

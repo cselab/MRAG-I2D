@@ -438,7 +438,7 @@ void I2D_FlowPastFixedObstacle::_refine(bool bUseIC) {
     while (true) {
       ((Refiner_BlackList *)refiner)->set_blacklist(&boundary_blocks);
       const int refinements = Science::AutomaticRefinement<0, 0>(
-          *grid, fwt_obstacle, RTOL, LMAX, 1, NULL,
+          *grid, fwt_obstacle, RTOL, LMAX, 1,
           (void (*)(Grid<W, B> &))NULL, &boundary_blocks);
       _ic(*grid);
       if (refinements == 0)
@@ -451,7 +451,7 @@ void I2D_FlowPastFixedObstacle::_refine(bool bUseIC) {
     while (true) {
       ((Refiner_BlackList *)refiner)->set_blacklist(&boundary_blocks);
       const int refinements = Science::AutomaticRefinement<0, 2>(
-          *grid, fwt_wuv, RTOL, LMAX, 1, NULL, (void (*)(Grid<W, B> &))NULL,
+          *grid, fwt_wuv, RTOL, LMAX, 1, (void (*)(Grid<W, B> &))NULL,
           &boundary_blocks);
       if (refinements == 0)
         break;
@@ -460,7 +460,7 @@ void I2D_FlowPastFixedObstacle::_refine(bool bUseIC) {
     while (true) {
       ((Refiner_BlackList *)refiner)->set_blacklist(&boundary_blocks);
       const int refinements = Science::AutomaticRefinement<0, 0>(
-          *grid, fwt_omega, RTOL, LMAX, 1, NULL, (void (*)(Grid<W, B> &))NULL,
+          *grid, fwt_omega, RTOL, LMAX, 1, (void (*)(Grid<W, B> &))NULL,
           &boundary_blocks);
       if (refinements == 0)
         break;
@@ -477,17 +477,17 @@ void I2D_FlowPastFixedObstacle::_compress(bool bUseIC) {
   // For initial condition compress given Xs only
   if (bUseIC) {
     obstacle->characteristic_function();
-    Science::AutomaticCompression<0, 0>(*grid, fwt_obstacle, CTOL, 1, NULL,
+    Science::AutomaticCompression<0, 0>(*grid, fwt_obstacle, CTOL, 1,
                                         (void (*)(Grid<W, B> &))NULL);
     return;
   }
 
   // For the rest refine given omega AND velocity
   if (!bREFINEOMEGAONLY)
-    Science::AutomaticCompression<0, 2>(*grid, fwt_wuv, CTOL, 1, NULL,
+    Science::AutomaticCompression<0, 2>(*grid, fwt_wuv, CTOL, 1,
                                         (void (*)(Grid<W, B> &))NULL);
   else
-    Science::AutomaticCompression<0, 0>(*grid, fwt_omega, CTOL, 1, NULL,
+    Science::AutomaticCompression<0, 0>(*grid, fwt_omega, CTOL, 1,
                                         (void (*)(Grid<W, B> &))NULL);
 }
 
@@ -617,17 +617,13 @@ void I2D_FlowPastFixedObstacle::run() {
 
   while (true) {
     printf("REFINING..\n");
-    profiler.push_start("REF");
     _refine(false);
-    profiler.pop_stop();
     printf("DONE WITH REFINEMENT\n");
 
     for (int i = 0; i < ADAPTFREQ; i++) {
       printf("INIT STEP\n");
 
-      profiler.push_start("VEL");
       velsolver->compute_velocity();
-      profiler.pop_stop();
       printf("DONE WITH COMPUTE VELOCITY\n");
 
       double tnext, tnext_dump, tend;
@@ -635,12 +631,10 @@ void I2D_FlowPastFixedObstacle::run() {
       const Real dt = (Real)tnext - t;
       printf("DONE WITH TNEXT\n");
 
-      profiler.push_start("PEN");
       obstacle->characteristic_function();
       penalization->perform_timestep(dt);
       obstacle->characteristic_function();
       obstacle->getObstacleInfo(infoObstacle);
-      profiler.pop_stop();
       printf("DONE WITH PENALIZATION\n");
 
       if (infoObstacle.size() != 0) {
@@ -650,14 +644,10 @@ void I2D_FlowPastFixedObstacle::run() {
       penalization->compute_dragandstuff(t, D, cor, "diag");
       printf("DONE WITH DRAG\n");
 
-      profiler.push_start("DIFF");
       diffusion->perform_timestep(dt);
-      profiler.pop_stop();
       printf("DONE WITH DIFFUSION\n");
 
-      profiler.push_start("ADV");
       advection->perform_timestep(dt);
-      profiler.pop_stop();
       printf("DONE WITH ADVECTION\n");
 
       t = tnext;
@@ -697,8 +687,6 @@ void I2D_FlowPastFixedObstacle::run() {
       printf("END TIME STEP (%d over %d)\n", i, ADAPTFREQ);
     }
 
-    profiler.printSummary();
-
     if (step_id % SAVEFREQ == 0) {
       printf("SAVING...\n");
       _save();
@@ -706,9 +694,7 @@ void I2D_FlowPastFixedObstacle::run() {
     }
 
     printf("COMPRESS..\n");
-    profiler.push_start("COMPRESS");
     _compress(false);
-    profiler.pop_stop();
     printf("DONE WITH COMPRESS\n");
   }
 }

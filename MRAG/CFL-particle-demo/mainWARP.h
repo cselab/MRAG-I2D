@@ -128,7 +128,6 @@ class DemoWARP {
   Compressor compressor;
   BlockFWT<W, B, WARP_projector> blockfwt;
   SpaceTimeSorter stSorter;
-  Profiler profiler;
   Real time;
 
   static const Real HeavySide(double x0, double x) {
@@ -188,15 +187,12 @@ public:
     grid->setCompressor(&compressor);
     grid->setRefiner(&refiner);
     stSorter.connect(*grid);
-
-    profiler.getAgent("initial condition").start();
     _ic(*grid);
     Science::AutomaticRefinement<0, 0>(*grid, blockfwt, refinement_tolerance,
-                                       maxLevel, 1, &profiler, _ic);
+                                       maxLevel, 1, _ic);
     _ic(*grid);
     Science::AutomaticCompression<0, 0>(*grid, blockfwt, compression_tolerance,
-                                        1, &profiler, _ic);
-    profiler.getAgent("initial condition").stop();
+                                        1, _ic);
   }
 
   void simulation_init() { printf("WARP init\n"); }
@@ -204,7 +200,7 @@ public:
   void simulation_run(int nsteps) {
     //	printf("WARP run\n");
     Science::AutomaticRefinement<0, 0>(*grid, blockfwt, refinement_tolerance,
-                                       maxLevel, -1, &profiler);
+                                       maxLevel, -1);
 
     vector<BlockInfo> vInfo = grid->getBlocksInfo();
     BoundaryInfo &sBoundaryInfo = grid->getBoundaryInfo();
@@ -233,8 +229,7 @@ public:
       time += dt;
     }
 
-    Science::AutomaticCompression<0, 0>(*grid, blockfwt, compression_tolerance,
-                                        1, &profiler);
+    Science::AutomaticCompression<0, 0>(*grid, blockfwt, compression_tolerance, 1);
   }
 
   void simulation_render(bool bDrawTextures) {

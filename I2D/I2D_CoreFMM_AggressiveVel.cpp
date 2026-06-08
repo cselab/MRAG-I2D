@@ -22,7 +22,6 @@ extern double _THETA;
 #include "MRAGcore/MRAGCommon.h"
 #include "MRAGcore/MRAGEnvironment.h"
 #include "MRAGcore/MRAGrid.h"
-#include "MRAGcore/MRAGProfiler.h"
 
 #include "mani-fmm2d/VortexExpansions.h"
 #include "mani-fmm2d/hcfmm_box.h"
@@ -273,33 +272,24 @@ void I2D_CoreFMM_AggressiveVel::solve(const Real theta, const Real inv_scaling,
                                       BlockInfo *dest, const int nblocks,
                                       VelocitySourceParticle *srcparticles,
                                       const int nparticles) {
-  Profiler profiler;
-
   _THETA = theta;
 
   tBox *rootBox = new tBox;
   tick_count start_before_tree = tick_count::now();
-  profiler.push_start("tree");
   tBoxBuilder::buildBoxes(srcparticles, nparticles, rootBox);
-  profiler.pop_stop();
 
   tick_count start_before_expansions = tick_count::now();
-  profiler.push_start("expansions");
   tBoxBuilder::generateExpansions(rootBox);
-  profiler.pop_stop();
 
   tick_count start_before_evaluations = tick_count::now();
-  profiler.push_start("evaluations");
   Measurements measurements(nblocks);
   VelocityEvaluator evaluator(rootBox, inv_scaling, measurements);
   evaluator.destblocks = dest;
   tbb::parallel_for(blocked_range<int>(0, nblocks), evaluator,
                     auto_partitioner());
-  profiler.pop_stop();
   tick_count end = tick_count::now();
 
-  if (timestamp++ % 5 == 0)
-    profiler.printSummary();
+  timestamp++;
 
   if (b_verbose) {
 

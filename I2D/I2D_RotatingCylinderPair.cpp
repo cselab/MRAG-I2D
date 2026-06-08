@@ -253,52 +253,38 @@ void I2D_RotatingCylinderPair::run() {
     printf("\n\n\n\n------------------ STEP %d ------------------\n",
            (int)step_id);
     printf("REFINING..\n");
-    profiler.push_start("REF");
     _refine(false); // don't use IC for refinement
-    profiler.pop_stop();
     printf("DONE WITH REFINEMENT\n");
 
     for (int i = 0; i < ADAPTFREQ; i++) {
       printf("INIT STEP\n");
 
       // Create shape here and load div def into tmp
-      profiler.push_start("SHAPE");
       floatingObstacle->create(t);
-      profiler.pop_stop();
       printf("DONE WITH SHAPE CREATION\n");
 
       // Reconstruct velocity field from vorticity and potential
-      profiler.push_start("VEL");
       velsolver->compute_velocity();
       printf("DONE WITH VELOCITY FROM VORTICITY\n");
-      profiler.pop_stop();
 
       double tnext, tnext_dump, tend;
       _tnext(tnext, tnext_dump, tend);
       const Real dt = (Real)tnext - t;
       printf("DONE WITH TNEXT\n");
 
-      profiler.push_start("DESVEL");
       floatingObstacle->computeDesiredVelocity(t);
-      profiler.pop_stop();
-      profiler.push_start("PEN");
       floatingObstacle->characteristic_function();
       penalization->perform_timestep(dt);
-      profiler.pop_stop();
       printf("DONE WITH PENALIZATION\n");
 
       if (bUSEOPTIMIZER) {
         // not yet implemented
       }
 
-      profiler.push_start("DIFF");
       diffusion->perform_timestep(dt);
-      profiler.pop_stop();
       printf("DONE WITH DIFFUSION\n");
 
-      profiler.push_start("ADV");
       advection->perform_timestep(dt);
-      profiler.pop_stop();
       printf("DONE WITH ADVECTION\n");
 
       floatingObstacle->update(dt, t);
@@ -353,12 +339,8 @@ void I2D_RotatingCylinderPair::run() {
     }
 
     printf("COMPRESS..\n");
-    profiler.push_start("COMPRESS");
     _compress(false);
-    profiler.pop_stop();
     printf("DONE WITH COMPRESS\n");
-
-    profiler.printSummary();
 
 #ifndef _FTLE_
     // Save should be after compressing otherwise one compressing stage would be

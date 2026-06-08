@@ -64,7 +64,6 @@ protected:
   I2D_AdvectionOperator *advection;
 
   InitialCondition *initialCondition;
-  Profiler profiler;
 
 #ifdef _MRAG_GLUT_VIZ
   GridViewer *viewer;

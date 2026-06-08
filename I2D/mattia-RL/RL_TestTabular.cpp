@@ -167,9 +167,7 @@ void RL_TestTabular::run() {
   long unsigned int step_id = 0;
   while (true) {
     // Choose an action
-    profiler.push_start("CHOOSE");
     const bool valid = agent->choose(t);
-    profiler.pop_stop();
     if (!valid) {
       printf("NON VALID: REFRESH!\n");
       agent->savePolicy();
@@ -178,21 +176,14 @@ void RL_TestTabular::run() {
     }
 
     // Update agents
-    profiler.push_start("UPDATE");
     agent->update(dt, t);
-    profiler.pop_stop();
 
     // Compute rewards
-    profiler.push_start("REWARD");
     agent->reward(t);
-    profiler.pop_stop();
 
-    profiler.push_start("LEARN");
     agent->learn(t);
-    profiler.pop_stop();
 
     if (step_id % SAVEFREQ == 0) {
-      profiler.printSummary();
       _save();
     }
 
@@ -208,14 +199,12 @@ void RL_TestTabular::run() {
     }
 
 #ifdef _RL_VIZ
-    profiler.push_start("PAINT");
     fotoTimer += dt;
     if (fotoTimer > fotoDT || step_id == 0) {
       fotoTimer = 0.0;
       _paint();
       // foto.shoot();
     }
-    profiler.pop_stop();
 #endif
   }
 }

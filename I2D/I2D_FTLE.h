@@ -37,8 +37,6 @@ protected:
 
   ArgumentParser parser;
 
-  Profiler profiler;
-
   Grid<W, B> *grid;
 
   BlockProcessing block_processing;

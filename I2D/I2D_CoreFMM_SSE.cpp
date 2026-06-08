@@ -30,7 +30,6 @@ extern double _THETA;
 #include "MRAGcore/MRAGCommon.h"
 #include "MRAGcore/MRAGEnvironment.h"
 #include "MRAGcore/MRAGrid.h"
-#include "MRAGcore/MRAGProfiler.h"
 
 #include "mani-fmm2d/VortexExpansions.h"
 #include "mani-fmm2d/hcfmm_box.h"
@@ -1029,44 +1028,25 @@ void I2D_CoreFMM_SSE::solve(const Real theta, const Real inv_scaling,
       _VortexExpansions<VelocitySourceParticle, _ORDER_>, _FMM_MAX_LEVEL_>
       tBoxBuilder;
 
-  Profiler profiler;
-
   _THETA = theta;
 
   tBox *rootBox = new tBox;
   ClockTime start_before_tree = tick_count::now();
-  profiler.push_start("tree");
   tBoxBuilder::buildBoxes(srcparticles, nparticles, rootBox);
-  profiler.pop_stop();
 
   ClockTime start_before_expansions = tick_count::now();
-  profiler.push_start("expansions");
   tBoxBuilder::generateExpansions(rootBox);
-  profiler.pop_stop();
 
   ClockTime start_before_plan = tick_count::now();
   VelocityEvaluatorSSE evaluator(dest, nblocks, rootBox, inv_scaling,
                                  nparticles, b_verbose);
-  profiler.push_start("extract interaction data");
   evaluator.extract_interaction_data();
-  profiler.pop_stop();
-  profiler.push_start("extract direct data");
   evaluator.extract_direct_data();
-  profiler.pop_stop();
-  profiler.push_start("make direct plan");
   evaluator.make_direct_plan();
-  profiler.pop_stop();
-  profiler.push_start("make indirect plan");
   evaluator.make_indirect_plan();
-  profiler.pop_stop();
-  profiler.push_start("evaluations");
   ClockTime start_before_run = tick_count::now();
   evaluator.run();
   ClockTime end = tick_count::now();
-  profiler.pop_stop();
-
-  if (b_verbose || timestamp % 5 == 0)
-    profiler.printSummary();
 
   if ((b_verbose && timestamp % 5 == 0) || timestamp % 10 == 0) {
     double total_direct_time = 0, total_indirect_time = 0;

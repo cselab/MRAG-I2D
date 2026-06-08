@@ -116,7 +116,7 @@ void I2D_TestPoissonEquation::_refine_omega(bool bUseIC) {
       void (*initial_condition)(Grid<W, B> &) = bUseIC ? _ic_omega : NULL;
       const int refinements = Science::AutomaticRefinement<0, 0>(
           *grid, fwt_omega, parser("-rtol").asDouble(), parser("-lmax").asInt(),
-          1, NULL, initial_condition, &boundary_blocks);
+          1, initial_condition, &boundary_blocks);
 
       if (refinements == 0)
         break;
@@ -132,7 +132,7 @@ void I2D_TestPoissonEquation::_refine_vel(bool bUseIC) {
       void (*initial_condition)(Grid<W, B> &) = bUseIC ? _ic_omega : NULL;
       const int refinements = Science::AutomaticRefinement<0, 1>(
           *grid, fwt_velocity, parser("-rtol").asDouble(),
-          parser("-lmax").asInt(), 1, NULL, initial_condition,
+          parser("-lmax").asInt(), 1, initial_condition,
           &boundary_blocks);
 
       if (refinements == 0)
@@ -146,7 +146,7 @@ void I2D_TestPoissonEquation::_compress(bool bUseIC) {
 
   if (!parser("-uniform").asBool())
     Science::AutomaticCompression<0, 0>(*grid, fwt_omega,
-                                        parser("-ctol").asDouble(), 1, NULL,
+                                        parser("-ctol").asDouble(), 1,
                                         initial_condition);
 }
 

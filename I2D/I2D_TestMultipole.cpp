@@ -91,7 +91,7 @@ void I2D_TestMultipole::_refine(bool bUseIC) {
       //initial_condition, &boundary_blocks);
       const int refinements = Science::AutomaticRefinement<0, 0>(
           *grid, fwt_omega, parser("-rtol").asDouble(), parser("-lmax").asInt(),
-          1, NULL, (void (*)(Grid<W, B> &))NULL);
+          1, (void (*)(Grid<W, B> &))NULL);
 
       if (bUseIC)
         _ic_omega(*grid);
@@ -105,7 +105,7 @@ void I2D_TestMultipole::_refine(bool bUseIC) {
 void I2D_TestMultipole::_compress(bool bUseIC) {
   if (!parser("-uniform").asBool())
     Science::AutomaticCompression<0, 0>(*grid, fwt_omega,
-                                        parser("-ctol").asDouble(), 1, NULL,
+                                        parser("-ctol").asDouble(), 1,
                                         (void (*)(Grid<W, B> &))NULL);
 
   if (bUseIC)
@@ -220,15 +220,11 @@ void I2D_TestMultipole::run() {
 
   _dump("before_potential");
 
-  profiler.push_start("POTENTIAL");
   poisson_solver->compute_velocity();
-  profiler.pop_stop();
   ;
 
-  profiler.push_start("ERROR");
   if (bRestart)
     _computeError();
-  profiler.pop_stop();
 
   if (!bRestart)
     _save();
@@ -236,11 +232,8 @@ void I2D_TestMultipole::run() {
   _dump("after_potential");
 
   {
-    profiler.printSummary();
-
     FILE *f = fopen("perf.txt", "w");
     assert(f != NULL);
-    profiler.printSummaryToFile(f);
     fclose(f);
   }
 

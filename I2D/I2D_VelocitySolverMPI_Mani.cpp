@@ -355,8 +355,6 @@ void I2D_VelocitySolverMPI_Mani::_master_update_blocks(int rank) {
 }
 
 void I2D_VelocitySolverMPI_Mani::compute_velocity() {
-  Profiler profiler;
-
   assert(grid_ptr != NULL);
   assert(comm_rank == 0);
 
@@ -398,10 +396,7 @@ void I2D_VelocitySolverMPI_Mani::compute_velocity() {
   for (int i = 1; i < comm_size; i++)
     workIDstart2node[i] = workIDstart2node[i - 1] + work2node[i - 1];
 
-  profiler.push_start("MPI-FMM");
-  profiler.push_start("count source particles");
   _count_sourceparticles();
-  profiler.pop_stop();
 
   if (nsource_particles == 0) {
     const BlockCollection<B> &coll = grid_ptr->getBlockCollection();
@@ -412,29 +407,17 @@ void I2D_VelocitySolverMPI_Mani::compute_velocity() {
     return;
   }
 
-  profiler.push_start("broad cast header");
   _bcast_header();
-  profiler.pop_stop();
 
-  profiler.push_start("collect source particles");
   _collect_sourceparticles();
-  profiler.pop_stop();
 
-  profiler.push_start("broadcast source particles");
   _bcast_sourcedata();
-  profiler.pop_stop();
 
-  profiler.push_start("the master part");
   _compute();
   _master_update_blocks(0);
-  profiler.pop_stop(); //("compute and collect results");
 
-  profiler.push_start("compute and collect results");
   _collect_results();
-  profiler.pop_stop();
 
   stepid++;
-  profiler.pop_stop();
-  profiler.printSummary();
 }
 #endif

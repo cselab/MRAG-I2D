@@ -45,7 +45,6 @@ protected:
   PF_Agent *collection;
   PF_Agent *tracers;
   RL::RL_TabularPolicy *policy;
-  MRAG::Profiler profiler;
 
   bool needsRefreshing;
   bool isUsingSoftReset;

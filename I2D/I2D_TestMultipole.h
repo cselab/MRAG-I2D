@@ -87,8 +87,6 @@ class I2D_TestMultipole : public I2D_Test {
 
   I2D_VelocityOperator *poisson_solver;
 
-  Profiler profiler;
-
   Real LambOseenGamma, LambOseenNut, LambOseenOrg[2];
 
 public:

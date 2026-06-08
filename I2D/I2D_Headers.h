@@ -35,7 +35,6 @@
 #include "MRAGcore/MRAGBlockLab.h"
 #include "MRAGcore/MRAGBlockFWT.h"
 #include "MRAGcore/MRAGBlock.h"
-#include "MRAGcore/MRAGProfiler.h"
 #include "MRAGcore/QuadTree.h"
 
 #ifdef _MRAG_GLUT_VIZ

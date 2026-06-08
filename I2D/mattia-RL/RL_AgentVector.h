@@ -21,7 +21,6 @@ class RL_AgentVector : public RL_Agent {
   vector<bool> valids;
   vector<string> name_learning;
   vector<string> name_saveQ;
-  MRAG::Profiler profiler;
 
 public:
   map<string, vector<RL_Agent *>> data;

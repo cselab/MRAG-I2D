@@ -10,7 +10,6 @@
 
 #include "../MRAGcore/MRAGCommon.h"
 #include "../MRAGcore/MRAGRefiner.h"
-#include "../MRAGcore/MRAGProfiler.h"
 #include "../MRAGcore/MRAGBlockFWT.h"
 
 namespace MRAG {
@@ -22,7 +21,6 @@ class AutomaticRefiner : public Refiner {
   double m_dMaxMemorySizeMB;
   int m_nMaxPasses;
 
-  Profiler *m_refProfiler;
   Refiner *m_refRefiner;
 
   Grid &m_grid;
@@ -41,10 +39,9 @@ class AutomaticRefiner : public Refiner {
 
 public:
   AutomaticRefiner(Grid &grid, BlockFWT &fwt, Refiner *refiner,
-                   double dMaxMemorySizeMB = 1000.0, Profiler *profiler = NULL)
+                   double dMaxMemorySizeMB = 1000.0)
       : Refiner(refiner->getMaxLevelJump()), m_grid(grid), m_fwt(fwt),
-        m_refRefiner(refiner), m_refProfiler(profiler),
-        m_dMaxMemorySizeMB(dMaxMemorySizeMB) {
+        m_refRefiner(refiner), m_dMaxMemorySizeMB(dMaxMemorySizeMB) {
     m_grid.setRefiner(this);
   }
 
@@ -91,8 +88,8 @@ public:
              "========================================================\n");
     RefinementResult refinement_result =
         Science::AutomaticRefinementForLevelsets(m_grid, m_fwt, tolerance, -1,
-                                                 true, -1, m_refProfiler,
-                                                 &maxDetailLeft, fillGrid);
+                                                 true, -1, &maxDetailLeft,
+                                                 fillGrid);
 
     if (!refinement_result.hasFailed()) {
       if (bVerbose)
@@ -123,8 +120,8 @@ public:
                candidate_tol);
       RefinementResult refinement_result =
           Science::AutomaticRefinementForLevelsets(m_grid, m_fwt, candidate_tol,
-                                                   -1, true, -1, m_refProfiler,
-                                                   &maxDetailLeft, fillGrid);
+                                                   -1, true, -1, &maxDetailLeft,
+                                                   fillGrid);
       if (bVerbose)
         printf("LOOP ATTEMPT END candidate_tol=%e maxDetailLeft=%e "
                "========================================================\n",
@@ -145,8 +142,6 @@ public:
                  "compression_tolerance=%e "
                  "========================================================\n",
                  compression_tolerance);
-        //	Science::AutomaticCompressionForLevelsets(m_grid, m_fwt,
-        //compression_tolerance, true, -1, m_refProfiler);
 
         if (bVerbose)
           printf("NEW TOL =%e\n", candidate_tol);

@@ -19,7 +19,6 @@ protected:
   MRAG::ArgumentParser parser;
   RL_TabularPolicy *policy;
   RL_Agent *agent;
-  MRAG::Profiler profiler;
 
   void _save();
   void _dispose();

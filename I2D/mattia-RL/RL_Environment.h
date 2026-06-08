@@ -8,7 +8,6 @@
 #ifndef RL_ENVIRONMENT_H_
 #define RL_ENVIRONMENT_H_
 
-#include "MRAGcore/MRAGProfiler.h"
 #include "MRAGio/MRAG_IO_ArgumentParser.h"
 
 typedef float Real;

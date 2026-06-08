@@ -157,9 +157,7 @@ void I2D_MRAGOptimisation::run() {
 
   while (true) {
     printf("REFINING..\n");
-    profiler.push_start("REF");
     _refine(false);
-    profiler.pop_stop();
     printf("DONE WITH REFINEMENT\n");
 
     for (int i = 0; i < ADAPTFREQ; i++) {
@@ -171,9 +169,7 @@ void I2D_MRAGOptimisation::run() {
         printf("DONE WITH KILLING VORTICITY AT RIGHT BOUNDARY\n");
       }
 
-      profiler.push_start("VEL");
       velsolver->compute_velocity();
-      profiler.pop_stop();
       printf("DONE WITH COMPUTE VELOCITY\n");
 
       double tnext, tnext_dump, tend;
@@ -181,12 +177,10 @@ void I2D_MRAGOptimisation::run() {
       const Real dt = (Real)tnext - t;
       printf("DONE WITH TNEXT\n");
 
-      profiler.push_start("PEN");
       obstacle->characteristic_function();
       penalization->perform_timestep(dt);
       obstacle->characteristic_function();
       obstacle->getObstacleInfo(infoObstacle);
-      profiler.pop_stop();
       printf("DONE WITH PENALIZATION\n");
 
       if (infoObstacle.size() != 0) {
@@ -201,14 +195,10 @@ void I2D_MRAGOptimisation::run() {
       }
       printf("DONE WITH DRAG\n");
 
-      profiler.push_start("DIFF");
       diffusion->perform_timestep(dt);
-      profiler.pop_stop();
       printf("DONE WITH DIFFUSION\n");
 
-      profiler.push_start("ADV");
       advection->perform_timestep(dt);
-      profiler.pop_stop();
       printf("DONE WITH ADVECTION\n");
 
       t = tnext;
@@ -257,8 +247,6 @@ void I2D_MRAGOptimisation::run() {
       printf("END TIME STEP (%d over %d)\n", i, ADAPTFREQ);
     }
 
-    profiler.printSummary();
-
     if (step_id % SAVEFREQ == 0) {
       printf("SAVING...\n");
       _save();
@@ -266,9 +254,7 @@ void I2D_MRAGOptimisation::run() {
     }
 
     printf("COMPRESS..\n");
-    profiler.push_start("COMPRESS");
     _compress(false);
-    profiler.pop_stop();
     printf("DONE WITH COMPRESS\n");
   }
 }

@@ -76,8 +76,6 @@ protected:
   I2D_AdvectionOperator *advection;
   I2D_DiffusionOperator *diffusion;
 
-  Profiler profiler;
-
 #ifdef _MRAG_GLUT_VIZ
   GridViewer *viewer;
 #endif

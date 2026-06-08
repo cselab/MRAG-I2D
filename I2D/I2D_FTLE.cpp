@@ -367,35 +367,28 @@ double I2D_FTLE::_advectParticles(map<long int, vector<Real>> &particles,
     map<I3, vector<long int>> block2particles;
 
     // Load grid
-    profiler.push_start("LOADGRID");
     _loadGrid(PATH + "/" + it->first);
-    profiler.pop_stop();
 
     vector<BlockInfo> vInfo = grid->getBlocksInfo();
     const BlockCollection<B> &coll = grid->getBlockCollection();
     BoundaryInfo &binfo = grid->getBoundaryInfo();
 
     // Get leaves
-    profiler.push_start("GETLEAVES");
     for (int i = 0; i < vInfo.size(); i++) {
       I3 node(vInfo[i].index[0], vInfo[i].index[1], vInfo[i].level);
       leaves.push_back(node);
       block2particles[node] = vector<long int>();
     }
-    profiler.pop_stop();
 
     // Instantiate octree and perform neighbors search
-    profiler.push_start("CREATETREE");
     const int LMAX = grid->getCurrentMaxLevel();
     double origin[2] = {0.0, 0.0};
     const double width = 1.0;
     QuadTree tree(LMAX + 1, width, origin);
     tree.split(leaves);
-    profiler.pop_stop();
 
     // Assign particles to blocks
     // THIS PART SHOULD BE PARALLELIZED!
-    profiler.push_start("LOCATECELL");
     assert(particles.size() > 0);
     for (map<long int, vector<Real>>::const_iterator it = particles.begin();
          it != particles.end(); ++it) {
@@ -427,14 +420,11 @@ double I2D_FTLE::_advectParticles(map<long int, vector<Real>> &particles,
 #endif
       }
     }
-    profiler.pop_stop();
 
     // Update passive tracer positions
     const double dt = dts[counter];
     I2D_TracerAdvection_RK advect(particles, block2particles, dt, Uinf);
-    profiler.push_start("ADVECT");
     block_processing.process<I2D_ParticleBlockLab>(vInfo, coll, binfo, advect);
-    profiler.pop_stop();
     T += dt;
 
     counter++;
@@ -454,7 +444,7 @@ void I2D_FTLE::_refine() {
   while (true) {
     ((Refiner_BlackList *)refiner)->set_blacklist(&boundary_blocks);
     const int refinements = Science::AutomaticRefinement<0, 3>(
-        *grid, fwt_wuvx, RTOL, LMAX, 1, NULL, (void (*)(Grid<W, B> &))NULL,
+        *grid, fwt_wuvx, RTOL, LMAX, 1, (void (*)(Grid<W, B> &))NULL,
         &boundary_blocks);
     if (refinements == 0)
       break;
@@ -551,8 +541,6 @@ void I2D_FTLE::run() {
 
       t_completed = tStart + DTFTLE / 2.0;
       _save();
-
-      profiler.printSummary();
     }
   }
 

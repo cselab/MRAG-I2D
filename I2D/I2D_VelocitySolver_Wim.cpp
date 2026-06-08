@@ -16,7 +16,6 @@ extern double _THETA;
 #include "MRAGcore/MRAGCommon.h"
 #include "MRAGcore/MRAGEnvironment.h"
 #include "MRAGcore/MRAGrid.h"
-#include "MRAGcore/MRAGProfiler.h"
 
 #include "mani-fmm2d/VortexExpansions.h"
 #include "mani-fmm2d/hcfmm_box.h"
@@ -61,7 +60,6 @@ struct Core_VelocitySolver {
   typedef HCFMM::boxBuilder_serial<tExpansions, _FMM_MAX_LEVEL_> tBoxBuilder;
 
   Grid<W, B> &grid;
-  Profiler *pProfiler;
 
   int _createSourceParticles(tParticle *&sources, const Real tolParticle,
                              const Real scaling_factor) const {
@@ -310,8 +308,6 @@ public:
 
   int execute(BlockProcessing &block_processing, double tolParticle,
               double in_scaling_factor, const Real theta) {
-    Profiler profiler;
-
     vector<BlockInfo> vInfo = grid.getBlocksInfo();
     const BlockCollection<B> &coll = grid.getBlockCollection();
 
@@ -332,20 +328,12 @@ public:
 
     tBox *rootBox = new tBox;
 
-    profiler.push_start("tree");
     tBoxBuilder::buildBoxes(sources, nof_sources, rootBox);
-    profiler.pop_stop();
 
-    profiler.push_start("expansions");
     tBoxBuilder::generateExpansions(rootBox);
-    profiler.pop_stop();
 
-    profiler.push_start("evaluations");
     VelocityEvaluatorWim evaluator(rootBox, 1. / in_scaling_factor, theta);
     block_processing.process(vInfo, coll, evaluator);
-    profiler.pop_stop();
-
-    profiler.printSummary();
 
     delete[] sources;
     sources = NULL;

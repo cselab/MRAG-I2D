@@ -950,55 +950,38 @@ void PF_Solver::run() {
       continue;
     }
 
-    profiler.push_start("DT");
     const double dt = _setTimeStep();
-    profiler.pop_stop();
 
-    profiler.push_start("CHOOSE");
     const bool valid = collection->choose(time);
-    profiler.pop_stop();
 
-    profiler.push_start("CHECK");
     _checkStatusPostAction(time, dt, valid, timeAtLastValidRefresh,
                            timeAtLastNonValidRefresh);
-    profiler.pop_stop();
 
-    profiler.push_start("VEL");
     _computeVelocity();
 #ifdef _RL_VIZ
     if (ISUSINGTRACERS)
       _computeVelocityTracers();
 #endif
-    profiler.pop_stop();
 
-    profiler.push_start("UPDATE");
     collection->update(dt, time);
     collection->updatePostVelocityUpdate(dt, time);
-    profiler.pop_stop();
 
     if (ISCONTROLLED) {
-      profiler.push_start("REWARD");
       collection->reward(time);
-      profiler.pop_stop();
 
-      profiler.push_start("LEARN");
       collection->learn(time);
-      profiler.pop_stop();
     }
 
     if (step_id % SAVEFREQ == 0) {
       printf("** Saving policy!\n");
       collection->savePolicy();
       _save(time);
-      profiler.printSummary();
     }
 
     time += dt;
     step_id++;
 
-    profiler.push_start("FITNESS");
     _computeFitness(time, dt);
-    profiler.pop_stop();
 
     // Average only when needed
     if (step_id % FITNESSSAVEFREQ == 0 && solverState == averaging) {
@@ -1010,14 +993,12 @@ void PF_Solver::run() {
 #ifdef _RL_VIZ
     if (ISUSINGTRACERS)
       tracers->update(dt, time);
-    profiler.push_start("PAINT");
     fotoTimer += dt;
     if (fotoTimer > fotoDT || step_id == 0) {
       fotoTimer = 0.0;
       _paint(time);
       //			foto.shoot();
     }
-    profiler.pop_stop();
 #endif
   }
 }

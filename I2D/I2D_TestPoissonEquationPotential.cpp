@@ -103,7 +103,7 @@ void I2D_TestPoissonEquationPotential::_refine(bool bUseIC) {
     while (true) {
       const int refinements = Science::AutomaticRefinement<0, 3>(
           *grid, fwt_omegaANDvelocityANDchi, parser("-rtol").asDouble(),
-          parser("-lmax").asInt(), 1, NULL, (void (*)(Grid<W, B> &))NULL, NULL);
+          parser("-lmax").asInt(), 1, (void (*)(Grid<W, B> &))NULL, NULL);
       _ic(*grid);
       if (refinements == 0)
         break;
@@ -112,7 +112,7 @@ void I2D_TestPoissonEquationPotential::_refine(bool bUseIC) {
     while (true) {
       const int refinements = Science::AutomaticRefinement<0, 3>(
           *grid, fwt_omegaANDvelocityANDchi, parser("-rtol").asDouble(),
-          parser("-lmax").asInt(), 1, NULL, (void (*)(Grid<W, B> &))NULL, NULL);
+          parser("-lmax").asInt(), 1, (void (*)(Grid<W, B> &))NULL, NULL);
       if (refinements == 0)
         break;
     }
@@ -123,7 +123,7 @@ void I2D_TestPoissonEquationPotential::_compress(bool bUseIC) {
   if (parser("-uniform").asBool())
     return;
   Science::AutomaticCompression<0, 3>(*grid, fwt_omegaANDvelocityANDchi,
-                                      parser("-ctol").asDouble(), 1, NULL,
+                                      parser("-ctol").asDouble(), 1,
                                       (void (*)(Grid<W, B> &))NULL);
 }
 

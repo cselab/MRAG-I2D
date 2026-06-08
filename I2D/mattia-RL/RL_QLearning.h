@@ -13,7 +13,6 @@
 
 #include "rng.h"
 
-#include "MRAGcore/MRAGProfiler.h"
 #include "RL_TabularPolicy.h"
 
 namespace RL {
@@ -35,7 +34,6 @@ protected:
   vector<double> histUsage;
 
   RNG rng;
-  MRAG::Profiler profiler;
 
   int _epsilonGreedySelection(const vector<int> &state);
   double _getValue(const vector<int> &idx);

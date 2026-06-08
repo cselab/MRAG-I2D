@@ -37,7 +37,7 @@ I2D_TestDiffusion::I2D_TestDiffusion(const int argc, const char **argv)
       ((Refiner_BlackList *)refiner)->set_blacklist(&boundary_blocks);
       const int refinements = Science::AutomaticRefinement<0, 0>(
           *grid, fwt_omega, parser("-rtol").asDouble(), parser("-lmax").asInt(),
-          1, NULL, _ic, &boundary_blocks);
+          1, _ic, &boundary_blocks);
 
       if (refinements == 0)
         break;
@@ -58,7 +58,7 @@ void I2D_TestDiffusion::_refine() {
       ((Refiner_BlackList *)refiner)->set_blacklist(&boundary_blocks);
       const int refinements = Science::AutomaticRefinement<0, 0>(
           *grid, fwt_omega, parser("-rtol").asDouble(), parser("-lmax").asInt(),
-          1, NULL, (void (*)(Grid<W, B> &))NULL, &boundary_blocks);
+          1, (void (*)(Grid<W, B> &))NULL, &boundary_blocks);
 
       if (refinements == 0)
         break;

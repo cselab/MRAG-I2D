@@ -114,7 +114,7 @@ void I2D_TestPenalizationAndOther::_refine(bool bUseIC) {
       void (*initial_condition)(Grid<W, B> &) = bUseIC ? _ic_omega : NULL;
       const int refinements = Science::AutomaticRefinement<0, 0>(
           *grid, fwt_obstacle, parser("-rtol").asDouble(),
-          parser("-lmax").asInt(), 1, NULL, initial_condition,
+          parser("-lmax").asInt(), 1, initial_condition,
           &boundary_blocks);
       printf("refinements = %d\n", refinements);
       if (refinements == 0)
@@ -131,7 +131,7 @@ void I2D_TestPenalizationAndOther::_compress(bool bUseIC) {
 
   if (!parser("-uniform").asBool())
     Science::AutomaticCompression<0, 0>(*grid, fwt_obstacle,
-                                        parser("-ctol").asDouble(), 1, NULL,
+                                        parser("-ctol").asDouble(), 1,
                                         initial_condition);
 
   if (bUseIC)

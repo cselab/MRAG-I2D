@@ -35,11 +35,11 @@ I2D_TestDumping::I2D_TestDumping(const int argc, const char **argv)
     refiner.set_blacklist(&boundary_blocks);
     Science::AutomaticRefinement<0, 0>(
         *grid, fwt_omega, parser("-rtol").asDouble(), parser("-lmax").asInt(),
-        1, NULL, _ic, &boundary_blocks);
+        1, _ic, &boundary_blocks);
   }
 
   Science::AutomaticCompression<0, 0>(*grid, fwt_omega,
-                                      parser("-ctol").asDouble(), 1, NULL, _ic);
+                                      parser("-ctol").asDouble(), 1, _ic);
 }
 
 void I2D_TestDumping::run() {

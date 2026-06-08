@@ -239,9 +239,7 @@ void I2D_SmartInteractions::run() {
   while (true) {
     printf("\n\n\n\n------------------ STEP %d ------------------\n",
            (int)step_id);
-    profiler.push_start("REF");
     _refine(false);
-    profiler.pop_stop();
 
     for (int i = 0; i < ADAPTFREQ; i++) {
       // Choose an action
@@ -251,17 +249,13 @@ void I2D_SmartInteractions::run() {
       // LEARNING
 
       // Create shape here and load div def into tmp
-      profiler.push_start("SHAPE");
       floatingObstacle->create(t);
-      profiler.pop_stop();
 
       // Reconstruct velocity field from vorticity and potential
-      profiler.push_start("VEL");
       velsolver->compute_velocity();
       if (bUSEPOTENTIAL) {
         potsolver->compute_velocity();
       }
-      profiler.pop_stop();
 
       double tnext, tnext_dump, tend;
       _tnext(tnext, tnext_dump, tend);
@@ -270,25 +264,15 @@ void I2D_SmartInteractions::run() {
       // floatingObstacle->savePolicy(); refresh(); break; } // ----> ONLY FOR
       // LEARNING if(dt<1e-7){ exit(0); } // ----> ONLY FOR OPTIMIZATION
 
-      profiler.push_start("DESVEL");
       floatingObstacle->computeDesiredVelocity(t);
-      profiler.pop_stop();
-      profiler.push_start("PEN");
       floatingObstacle->characteristic_function();
       penalization->perform_timestep(dt);
-      profiler.pop_stop();
 
-      profiler.push_start("DIFF");
       diffusion->perform_timestep(dt);
-      profiler.pop_stop();
 
-      profiler.push_start("ADV");
       advection->perform_timestep(dt);
-      profiler.pop_stop();
 
-      // profiler.push_start("EFF");
       // efficiency->compute(floatingObstacle,t,dt,TSTARTEFF,TENDEFF);
-      // profiler.pop_stop();
 
       floatingObstacle->update(dt, t);
       floatingObstacle->reward(t);
@@ -336,11 +320,7 @@ void I2D_SmartInteractions::run() {
         _save();
     }
 
-    profiler.push_start("COMPRESS");
     _compress(false);
-    profiler.pop_stop();
-
-    // profiler.printSummary();
 
     // Save should be after compressing otherwise one compressing stage would be
     // lost!

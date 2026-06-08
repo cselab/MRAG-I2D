@@ -97,7 +97,7 @@ void I2D_TestAdvection::_refine(bool bUseIC) {
       void (*initial_condition)(Grid<W, B> &) = bUseIC ? _ic_omega : NULL;
       const int refinements = Science::AutomaticRefinement<0, 0>(
           *grid, fwt_omega, parser("-rtol").asDouble(), parser("-lmax").asInt(),
-          1, NULL, initial_condition); //, &boundary_blocks);
+          1, initial_condition); //, &boundary_blocks);
 
       if (refinements == 0)
         break;
@@ -112,7 +112,7 @@ void I2D_TestAdvection::_compress(bool bUseIC) {
 
   if (!parser("-uniform").asBool())
     Science::AutomaticCompression<0, 0>(*grid, fwt_omega,
-                                        parser("-ctol").asDouble(), 1, NULL,
+                                        parser("-ctol").asDouble(), 1,
                                         initial_condition);
 
   _ic_velocity(*grid);
