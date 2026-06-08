@@ -19,18 +19,15 @@
 #include "I2D_KillVortRightBoundaryOperator.h"
 #include "I2D_FlowPastFixedObstacle.h"
 
+class I2D_MRAGOptimisation : public I2D_FlowPastFixedObstacle {
+  int KILLVORT;
+  string sCTRL;
 
-class I2D_MRAGOptimisation: public I2D_FlowPastFixedObstacle
-{
-	int KILLVORT;
-	string sCTRL;
-	
-	I2D_KillVortRightBoundaryOperator * killVort;
-	
+  I2D_KillVortRightBoundaryOperator *killVort;
+
 public:
-	
-	I2D_MRAGOptimisation(const int argc, const char ** argv);
-	
-	void run();
-	void paint(){}
+  I2D_MRAGOptimisation(const int argc, const char **argv);
+
+  void run();
+  void paint() {}
 };

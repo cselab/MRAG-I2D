@@ -9,12 +9,12 @@
 
 #pragma once
 
-extern  double _THETA;
+extern double _THETA;
 #define _FMMSILENT
 
 #include "I2D_FMMTypes.h"
 
-//#include "I2D_CoreFMM_AggressiveExpansion.h"
+// #include "I2D_CoreFMM_AggressiveExpansion.h"
 #include "mani-fmm2d/VortexExpansions.h"
 #include "mani-fmm2d/hcfmm_box.h"
 #include "mani-fmm2d/hcfmm_boxBuilder_serial.h"
@@ -26,9 +26,11 @@ extern  double _THETA;
 
 class Plan {
 public:
-	typedef HCFMM::Box<_VortexExpansions<VelocitySourceParticle, _ORDER_>,_FMM_MAX_LEVEL_> tBox;
+  typedef HCFMM::Box<_VortexExpansions<VelocitySourceParticle, _ORDER_>,
+                     _FMM_MAX_LEVEL_>
+      tBox;
 
-	virtual void addDirectInteraction (const tBox* const, int, bool) = 0;
-	virtual void addIndirectInteraction (const tBox* const, int) = 0;
-	virtual void merge_direct_intervals (int) = 0;
+  virtual void addDirectInteraction(const tBox *const, int, bool) = 0;
+  virtual void addIndirectInteraction(const tBox *const, int) = 0;
+  virtual void merge_direct_intervals(int) = 0;
 };

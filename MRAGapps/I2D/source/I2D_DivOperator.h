@@ -15,7 +15,7 @@
  * vorticity():
  * IN: omega[0-2]
  * OUT: tmp
- * 
+ *
  */
 
 #pragma once
@@ -23,14 +23,12 @@
 #include "I2D_Headers.h"
 #include "I2D_Types.h"
 
-class I2D_DivOperator
-{
-	Grid<W,B>& grid;
-	BlockProcessing block_processing;
-	
+class I2D_DivOperator {
+  Grid<W, B> &grid;
+  BlockProcessing block_processing;
+
 public:
-	
-	I2D_DivOperator(Grid<W,B>& grid): grid(grid){}
-	
-	void perform();
+  I2D_DivOperator(Grid<W, B> &grid) : grid(grid) {}
+
+  void perform();
 };

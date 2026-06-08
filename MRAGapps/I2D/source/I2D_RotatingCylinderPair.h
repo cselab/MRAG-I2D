@@ -20,27 +20,26 @@
 #include "I2D_ObjectFactory.h"
 #include "I2D_KillVortRightBoundaryOperator.h"
 
-class I2D_RotatingCylinderPair: public I2D_FlowPastFloatingObstacle
-{
-    protected:
-	Real charLength, charVel;
-	I2D_ObjectFactory * factory;
-	bool bUSEKILLVORT;
-	int KILLVORT;
-	I2D_KillVortRightBoundaryOperator * killVort;
-	bool bUSEOPTIMIZER;
-	Real TBOUND;
+class I2D_RotatingCylinderPair : public I2D_FlowPastFloatingObstacle {
+protected:
+  Real charLength, charVel;
+  I2D_ObjectFactory *factory;
+  bool bUSEKILLVORT;
+  int KILLVORT;
+  I2D_KillVortRightBoundaryOperator *killVort;
+  bool bUSEOPTIMIZER;
+  Real TBOUND;
 
-	Real TIMESCALE;
-    Real LENGTHSCALE;
-    Real CIRCULATION;
-    Real OMEGA; // angular velocity rad/s
-    public:
-	I2D_RotatingCylinderPair(const int argc, const char ** argv);
-	~I2D_RotatingCylinderPair();
-	virtual void run();
-	void _tnext(double &tnext, double& tnext_dump, double& tend); // overriding FlowPastFixedObstacle::_tnext
+  Real TIMESCALE;
+  Real LENGTHSCALE;
+  Real CIRCULATION;
+  Real OMEGA; // angular velocity rad/s
+public:
+  I2D_RotatingCylinderPair(const int argc, const char **argv);
+  ~I2D_RotatingCylinderPair();
+  virtual void run();
+  void _tnext(double &tnext, double &tnext_dump,
+              double &tend); // overriding FlowPastFixedObstacle::_tnext
 };
-
 
 #endif /* defined(__I2D_ROCKS__I2D_RotatingCylinderPair__) */

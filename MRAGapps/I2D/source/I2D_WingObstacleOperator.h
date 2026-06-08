@@ -15,26 +15,25 @@
 
 #include <map>
 
-struct ChiBlock
-{
-	Real chi[_BLOCKSIZE_][_BLOCKSIZE_];
+struct ChiBlock {
+  Real chi[_BLOCKSIZE_][_BLOCKSIZE_];
 };
 
-class I2D_WingObstacleOperator: public I2D_ObstacleOperator
-{
-	map<int, ChiBlock *> cached_blocks;
-	int nBleeds, nTrailingBleeds;
-	bool plainAirfoil;
-	Real smoothing_length;
-	Grid<W,B>& grid;
-	BlockProcessing block_processing;
-	
+class I2D_WingObstacleOperator : public I2D_ObstacleOperator {
+  map<int, ChiBlock *> cached_blocks;
+  int nBleeds, nTrailingBleeds;
+  bool plainAirfoil;
+  Real smoothing_length;
+  Grid<W, B> &grid;
+  BlockProcessing block_processing;
+
 public:
-	I2D_WingObstacleOperator(Grid<W,B>& grid, ArgumentParser& parser, Real cm[2], const Real smoothing_length);
-	
-	void getObstacleInfo(vector<Real> & infoObstacle);
-	
-	void characteristic_function();
-	
-	Real getD() const {return 2./16;}
+  I2D_WingObstacleOperator(Grid<W, B> &grid, ArgumentParser &parser, Real cm[2],
+                           const Real smoothing_length);
+
+  void getObstacleInfo(vector<Real> &infoObstacle);
+
+  void characteristic_function();
+
+  Real getD() const { return 2. / 16; }
 };

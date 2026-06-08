@@ -16,32 +16,29 @@
 #include <stdio.h>
 #include "Screenshot.h"
 
-class FotoCamera
-{
+class FotoCamera {
 public:
-	// Constructor
-	FotoCamera(){};
-	~FotoCamera(){};
-	
-	// Methods
-	void shoot(void)
-	{
-		int frequency = 1;
-		static int iFrameCounterAbsolute = 0;
-		static int iFrameCounter = 0;
-		char buf[300];
-		if( iFrameCounterAbsolute % frequency == 0 )
-		{
-			iFrameCounter++;
-			//if(iFrameCounter < 7000)
-			//{
-			sprintf(buf, "img%07d.tga", iFrameCounter);
-			printf("Writing to %s\n", buf);
-			gltWriteTGA(buf);
-			//}
-		}
-		iFrameCounterAbsolute++;
-	}
+  // Constructor
+  FotoCamera() {};
+  ~FotoCamera() {};
+
+  // Methods
+  void shoot(void) {
+    int frequency = 1;
+    static int iFrameCounterAbsolute = 0;
+    static int iFrameCounter = 0;
+    char buf[300];
+    if (iFrameCounterAbsolute % frequency == 0) {
+      iFrameCounter++;
+      // if(iFrameCounter < 7000)
+      //{
+      sprintf(buf, "img%07d.tga", iFrameCounter);
+      printf("Writing to %s\n", buf);
+      gltWriteTGA(buf);
+      //}
+    }
+    iFrameCounterAbsolute++;
+  }
 };
 
 #endif

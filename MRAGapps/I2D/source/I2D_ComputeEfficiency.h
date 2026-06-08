@@ -12,25 +12,28 @@
 #include "I2D_Types.h"
 #include "I2D_FloatingObstacleOperator.h"
 
-class I2D_ComputeEfficiency
-{
+class I2D_ComputeEfficiency {
 protected:
-	double viscosity, density;
-	Grid<W,B>& grid;
-	BlockProcessing block_processing;
-	I2D_FloatingObstacleOperator * floatingObstacle;
+  double viscosity, density;
+  Grid<W, B> &grid;
+  BlockProcessing block_processing;
+  I2D_FloatingObstacleOperator *floatingObstacle;
 
 public:
-	I2D_ComputeEfficiency(Grid<W,B>& grid, I2D_FloatingObstacleOperator * floatingObstacle, double viscosity, double density = 1.0): grid(grid), floatingObstacle(floatingObstacle), viscosity(viscosity), density(density)
-	{
-		assert(viscosity>0);
-		assert(density>0);
-		assert(floatingObstacle!=NULL);
-	}
+  I2D_ComputeEfficiency(Grid<W, B> &grid,
+                        I2D_FloatingObstacleOperator *floatingObstacle,
+                        double viscosity, double density = 1.0)
+      : grid(grid), floatingObstacle(floatingObstacle), viscosity(viscosity),
+        density(density) {
+    assert(viscosity > 0);
+    assert(density > 0);
+    assert(floatingObstacle != NULL);
+  }
 
-	virtual ~I2D_ComputeEfficiency(){};
+  virtual ~I2D_ComputeEfficiency() {};
 
-	void compute(I2D_FloatingObstacleOperator * floatingObstacle, double t, double dt, double startTime, double endTime);
+  void compute(I2D_FloatingObstacleOperator *floatingObstacle, double t,
+               double dt, double startTime, double endTime);
 };
 
 #endif /* I2D_COMPUTEEFFICIENCY_H_ */

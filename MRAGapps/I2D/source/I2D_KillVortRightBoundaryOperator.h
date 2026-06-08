@@ -12,23 +12,15 @@
 #include "I2D_Types.h"
 #include "I2D_ObstacleOperator.h"
 
-class I2D_KillVortRightBoundaryOperator
-{
-	int killed_width;
-	
-	Grid<W,B>& grid;
-	BlockProcessing block_processing;
-	
-	
+class I2D_KillVortRightBoundaryOperator {
+  int killed_width;
+
+  Grid<W, B> &grid;
+  BlockProcessing block_processing;
+
 public:
-	
-	I2D_KillVortRightBoundaryOperator(Grid<W,B>& grid, Real killed_width): 
-	grid(grid), killed_width(killed_width)
-	{
-	}
-		
-	void killVorticity();
+  I2D_KillVortRightBoundaryOperator(Grid<W, B> &grid, Real killed_width)
+      : grid(grid), killed_width(killed_width) {}
+
+  void killVorticity();
 };
-
-
-

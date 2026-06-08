@@ -8,11 +8,10 @@
  */
 #pragma once
 
-class I2D_ObstacleOperator
-{
-public:	
-	virtual void characteristic_function() = 0;
-	virtual Real getD() const = 0;
-	virtual void getObstacleInfo(vector<Real> & infoObstacle){}
-	virtual ~I2D_ObstacleOperator(){}
+class I2D_ObstacleOperator {
+public:
+  virtual void characteristic_function() = 0;
+  virtual Real getD() const = 0;
+  virtual void getObstacleInfo(vector<Real> &infoObstacle) {}
+  virtual ~I2D_ObstacleOperator() {}
 };

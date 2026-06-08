@@ -55,4 +55,3 @@
 #include "MRAGio/MRAG_IO_ArgumentParser.h"
 #include "MRAGio/MRAG_IO_Binary.h"
 #include "MRAGio/MRAG_IO_VTKNative.h"
-

@@ -20,21 +20,20 @@
 #include "I2D_ObjectFactory.h"
 #include "I2D_KillVortRightBoundaryOperator.h"
 
-class I2D_FluidMediatedInteractions: public I2D_FlowPastFloatingObstacle
-{	
+class I2D_FluidMediatedInteractions : public I2D_FlowPastFloatingObstacle {
 protected:
-	bool bUSEPOTENTIAL;
-	Real charLength, charVel;
-	I2D_ObjectFactory * factory;
-	I2D_VelocityOperator * potsolver;
-	bool bUSEKILLVORT;
-	int KILLVORT;
-	I2D_KillVortRightBoundaryOperator * killVort;
-	bool bUSEOPTIMIZER;
-	Real TBOUND;
-	
-public:	
-	I2D_FluidMediatedInteractions(const int argc, const char ** argv);
-	~I2D_FluidMediatedInteractions();
-	virtual void run();
+  bool bUSEPOTENTIAL;
+  Real charLength, charVel;
+  I2D_ObjectFactory *factory;
+  I2D_VelocityOperator *potsolver;
+  bool bUSEKILLVORT;
+  int KILLVORT;
+  I2D_KillVortRightBoundaryOperator *killVort;
+  bool bUSEOPTIMIZER;
+  Real TBOUND;
+
+public:
+  I2D_FluidMediatedInteractions(const int argc, const char **argv);
+  ~I2D_FluidMediatedInteractions();
+  virtual void run();
 };

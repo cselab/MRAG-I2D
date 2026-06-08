@@ -13,21 +13,16 @@
 
 class I2D_CoreFMM_SSE : public I2D_CoreFMM_AggressiveVel {
 public:
+  void setVerbose(bool _b_verbose) { b_verbose = _b_verbose; }
 
-	void setVerbose (bool _b_verbose) {
-		b_verbose = _b_verbose;
-	}
+  bool isVerbose() { return b_verbose; }
 
-	bool isVerbose () {
-		return b_verbose;
-	}
+  I2D_CoreFMM_SSE(bool _b_verbose = false) : b_verbose(_b_verbose) {}
 
-	I2D_CoreFMM_SSE (bool _b_verbose = false) : b_verbose (_b_verbose) {}
-
-	virtual void solve(const Real theta, const Real inv_scaling, BlockInfo * dest, const int nblocks, VelocitySourceParticle * srcparticles, const int nparticles);
+  virtual void solve(const Real theta, const Real inv_scaling, BlockInfo *dest,
+                     const int nblocks, VelocitySourceParticle *srcparticles,
+                     const int nparticles);
 
 protected:
-
-	bool b_verbose;
-
+  bool b_verbose;
 };

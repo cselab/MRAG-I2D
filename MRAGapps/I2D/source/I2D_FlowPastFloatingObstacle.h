@@ -18,19 +18,17 @@
 #include "I2D_DiffusionOperator.h"
 #include "I2D_FlowPastFixedObstacle.h"
 
-class I2D_FlowPastFloatingObstacle: public I2D_FlowPastFixedObstacle
-{	
+class I2D_FlowPastFloatingObstacle : public I2D_FlowPastFixedObstacle {
 protected:
-	I2D_FloatingObstacleOperator * floatingObstacle;
-	
-	void _restart();
-	void _save();
-	void _refresh(const Real t);
-	
-public:	
+  I2D_FloatingObstacleOperator *floatingObstacle;
 
-	I2D_FlowPastFloatingObstacle(const int argc, const char ** argv);
-	~I2D_FlowPastFloatingObstacle();
-	
-	virtual void run();
+  void _restart();
+  void _save();
+  void _refresh(const Real t);
+
+public:
+  I2D_FlowPastFloatingObstacle(const int argc, const char **argv);
+  ~I2D_FlowPastFloatingObstacle();
+
+  virtual void run();
 };

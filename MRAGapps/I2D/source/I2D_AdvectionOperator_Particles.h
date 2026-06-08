@@ -15,17 +15,17 @@
 
 #include "I2D_AdvectionOperator.h"
 
-class I2D_AdvectionOperator_Particles: public I2D_AdvectionOperator
-{
-	Real LCFL;
-	
-	Real _GTS_CFL(); //estimate the dt-CFL based on a global time stepping
-	
+class I2D_AdvectionOperator_Particles : public I2D_AdvectionOperator {
+  Real LCFL;
+
+  Real _GTS_CFL(); // estimate the dt-CFL based on a global time stepping
+
 public:
-	I2D_AdvectionOperator_Particles(Grid<W,B>& grid, double CFL=0.25, double LCFL=0.25):
-	I2D_AdvectionOperator(grid, CFL), LCFL(LCFL){}
-	
-	Real estimate_largest_dt();
-	
-	void perform_timestep(double dt);
+  I2D_AdvectionOperator_Particles(Grid<W, B> &grid, double CFL = 0.25,
+                                  double LCFL = 0.25)
+      : I2D_AdvectionOperator(grid, CFL), LCFL(LCFL) {}
+
+  Real estimate_largest_dt();
+
+  void perform_timestep(double dt);
 };

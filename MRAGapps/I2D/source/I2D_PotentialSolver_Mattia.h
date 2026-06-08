@@ -10,17 +10,15 @@
 
 #include "I2D_VelocitySolver_Mani.h"
 
-class I2D_PotentialSolver_Mattia: public I2D_VelocitySolver_Mani
-{
+class I2D_PotentialSolver_Mattia : public I2D_VelocitySolver_Mani {
 protected:
-
-	void _updateBlocks();
-	void _collect_sourceparticles();
-	void _count_sourceparticles();
+  void _updateBlocks();
+  void _collect_sourceparticles();
+  void _count_sourceparticles();
 
 public:
+  I2D_PotentialSolver_Mattia(Grid<W, B> &grid, ArgumentParser &parser_)
+      : I2D_VelocitySolver_Mani(grid, parser_) {}
 
-	I2D_PotentialSolver_Mattia(Grid<W,B>& grid, ArgumentParser& parser_): I2D_VelocitySolver_Mani(grid,parser_) {}
-
-	void compute_velocity();
+  void compute_velocity();
 };

@@ -13,24 +13,20 @@
 #include "I2D_Types.h"
 #include "I2D_FMMTypes.h"
 
-class I2D_CoreFMM_AggressiveVel
-{
+class I2D_CoreFMM_AggressiveVel {
 protected:
-	int timestamp;
-	
+  int timestamp;
+
 public:
+  void setVerbose(bool _b_verbose) { b_verbose = _b_verbose; }
 
-	void setVerbose (bool _b_verbose) {
-		b_verbose = _b_verbose;
-	}
+  bool isVerbose() { return b_verbose; }
 
-	bool isVerbose () {
-		return b_verbose;
-	}
+  I2D_CoreFMM_AggressiveVel(bool _b_verbose = false) : b_verbose(_b_verbose) {}
 
-	I2D_CoreFMM_AggressiveVel (bool _b_verbose = false) : b_verbose (_b_verbose) {}
+  virtual void solve(const Real theta, const Real inv_scaling, BlockInfo *dest,
+                     const int nblocks, VelocitySourceParticle *srcparticles,
+                     const int nparticles);
 
-	virtual void solve(const Real theta, const Real inv_scaling, BlockInfo * dest, const int nblocks, VelocitySourceParticle * srcparticles, const int nparticles);
-
-	bool b_verbose;
+  bool b_verbose;
 };

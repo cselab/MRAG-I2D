@@ -14,20 +14,20 @@
 #include "RL_Agent.h"
 #include "RL_TabularPolicy.h"
 
-namespace RL
-{
+namespace RL {
 
-class RL_ObjectFactory
-{
-	const Real charLength, XCM, YCM;
+class RL_ObjectFactory {
+  const Real charLength, XCM, YCM;
 
-	int _lines(string filename);
+  int _lines(string filename);
 
 public:
-	RL_ObjectFactory(const Real charLength, const Real XCM, const Real YCM);
-	~RL_ObjectFactory();
+  RL_ObjectFactory(const Real charLength, const Real XCM, const Real YCM);
+  ~RL_ObjectFactory();
 
-	void create(MRAG::ArgumentParser & parser, map< string, vector<RL_Agent *> >& shapesMap, RL_TabularPolicy ** policy = NULL);
+  void create(MRAG::ArgumentParser &parser,
+              map<string, vector<RL_Agent *>> &shapesMap,
+              RL_TabularPolicy **policy = NULL);
 };
 
 } /* namespace RL */

@@ -8,8 +8,7 @@
  */
 #pragma once
 
-class I2D_VelocityOperator
-{
+class I2D_VelocityOperator {
 public:
-	virtual void compute_velocity() = 0;
+  virtual void compute_velocity() = 0;
 };

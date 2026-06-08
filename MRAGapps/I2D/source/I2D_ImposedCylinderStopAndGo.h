@@ -13,18 +13,22 @@
 #include "I2D_ObstacleOperator.h"
 #include "I2D_ImposedCylinder.h"
 
-class I2D_ImposedCylinderStopAndGo: public I2D_ImposedCylinder
-{	
-	const Real tstop;
+class I2D_ImposedCylinderStopAndGo : public I2D_ImposedCylinder {
+  const Real tstop;
 
 public:
+  I2D_ImposedCylinderStopAndGo(ArgumentParser &parser, Grid<W, B> &grid,
+                               const Real _xm, const Real _ym, const Real _vx,
+                               const Real _vy, const Real _tstop, const Real _D,
+                               const Real eps, const Real Uinf[2],
+                               I2D_PenalizationOperator &penalization);
+  ~I2D_ImposedCylinderStopAndGo();
 
-	I2D_ImposedCylinderStopAndGo(ArgumentParser & parser, Grid<W,B>& grid, const Real _xm, const Real _ym, const Real _vx, const Real _vy, const Real _tstop, const Real _D, const Real eps, const Real Uinf[2], I2D_PenalizationOperator& penalization);
-	~I2D_ImposedCylinderStopAndGo();
-	
-	Real getModulusMaxVel();
-	void update(const double dt, const double t, string filename = std::string(), map< string, vector<I2D_FloatingObstacleOperator *> > * _data = NULL);
-	
+  Real getModulusMaxVel();
+  void
+  update(const double dt, const double t, string filename = std::string(),
+         map<string, vector<I2D_FloatingObstacleOperator *>> *_data = NULL);
+
 protected:
-	void _setMotionPattern(const Real t);
+  void _setMotionPattern(const Real t);
 };

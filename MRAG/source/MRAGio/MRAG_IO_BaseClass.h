@@ -23,19 +23,18 @@ using namespace std;
 #include "MRAGcore/MRAGBlockCollection.h"
 #include "MRAGcore/MRAGBlockLab.h"
 
-namespace MRAG
-{
-	template<typename TWavelets, typename TBlock, typename TProjector = dummy_projector, int nChannels=1 >
-	class IO_BaseClass
-	{
-	public:
-		// Typedefs
-		typedef MRAG::Grid<TWavelets, TBlock> GridType;
-		typedef map<GridNode *, vector<GridNode *> > HierarchyType;
-		typedef typename TBlock::ElementType ElementType;
-			
-		// Virtual methods
-		virtual void Write( GridType & inputGrid, string fileName ) = 0;
-		virtual void Read( GridType & inputGrid, string fileName ) = 0;
-	};
-}
+namespace MRAG {
+template <typename TWavelets, typename TBlock,
+          typename TProjector = dummy_projector, int nChannels = 1>
+class IO_BaseClass {
+public:
+  // Typedefs
+  typedef MRAG::Grid<TWavelets, TBlock> GridType;
+  typedef map<GridNode *, vector<GridNode *>> HierarchyType;
+  typedef typename TBlock::ElementType ElementType;
+
+  // Virtual methods
+  virtual void Write(GridType &inputGrid, string fileName) = 0;
+  virtual void Read(GridType &inputGrid, string fileName) = 0;
+};
+} // namespace MRAG

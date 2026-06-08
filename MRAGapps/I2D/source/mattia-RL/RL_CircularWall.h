@@ -11,18 +11,16 @@
 #include "MRAGio/MRAG_IO_ArgumentParser.h"
 #include "RL_Agent.h"
 
-namespace RL
-{
+namespace RL {
 
-class RL_CircularWall : public RL_Agent
-{
+class RL_CircularWall : public RL_Agent {
 public:
-	const Real D,innerD,x,y;
-	RL_CircularWall(MRAG::ArgumentParser & parser);
-	virtual ~RL_CircularWall();
+  const Real D, innerD, x, y;
+  RL_CircularWall(MRAG::ArgumentParser &parser);
+  virtual ~RL_CircularWall();
 
 #ifdef _RL_VIZ
-	virtual void paint();
+  virtual void paint();
 #endif
 };
 

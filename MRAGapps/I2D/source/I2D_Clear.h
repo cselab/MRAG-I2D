@@ -12,10 +12,10 @@
 #include "I2D_Headers.h"
 #include "I2D_Types.h"
 
-class I2D_Clear
-	{		
-		BlockProcessing block_processing;
-	public:
-		void clearTmp(Grid<W,B> & grid);
-		void clearVel(Grid<W,B> & grid);
-	};
+class I2D_Clear {
+  BlockProcessing block_processing;
+
+public:
+  void clearTmp(Grid<W, B> &grid);
+  void clearVel(Grid<W, B> &grid);
+};

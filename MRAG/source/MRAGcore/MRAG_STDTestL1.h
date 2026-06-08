@@ -11,41 +11,35 @@
 
 #include "MRAGCommon.h"
 #include "MRAGrid.h"
-   
-namespace MRAG
-{
-	
+
+namespace MRAG {
+
 template <typename Wavelets, typename Block>
-class MRAG_STDTestL1 //LEVEL 1: crashes, memory leaks 
+class MRAG_STDTestL1 // LEVEL 1: crashes, memory leaks
 {
 protected:
-	virtual bool run()
-	{
-		// OVERLOAD THIS
-		
-		try
-		{
-			const int nBlocks = 20;
-			MRAG::Grid<Wavelets, Block> * grid = new MRAG::Grid<Wavelets, Block>(nBlocks,nBlocks,1);
-			
-			delete grid;
-		}
-		catch(...)
-		{
-			return false;
-		}
-		
-		return true;
-	}
-	
+  virtual bool run() {
+    // OVERLOAD THIS
+
+    try {
+      const int nBlocks = 20;
+      MRAG::Grid<Wavelets, Block> *grid =
+          new MRAG::Grid<Wavelets, Block>(nBlocks, nBlocks, 1);
+
+      delete grid;
+    } catch (...) {
+      return false;
+    }
+
+    return true;
+  }
+
 public:
-	static void runTests()
-	{
-		MRAG_STDTestL1<Wavelets, Block> test;
-		
-		test.run();
-	}
+  static void runTests() {
+    MRAG_STDTestL1<Wavelets, Block> test;
+
+    test.run();
+  }
 };
 
-
-}
+} // namespace MRAG

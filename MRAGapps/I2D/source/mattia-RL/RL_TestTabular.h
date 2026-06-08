@@ -8,38 +8,35 @@
 #include "RL_TabularPolicy.h"
 #include "RL_Agent.h"
 
-namespace RL
-{
+namespace RL {
 
-class RL_TestTabular: public IF2D_Test
-{
+class RL_TestTabular : public IF2D_Test {
 protected:
-	Real CHARLENGTH, XPOS, YPOS;
-	bool RESTART;
-	int SAVEFREQ;
+  Real CHARLENGTH, XPOS, YPOS;
+  bool RESTART;
+  int SAVEFREQ;
 
-	MRAG::ArgumentParser parser;
-	RL_TabularPolicy * policy;
-	RL_Agent * agent;
-	MRAG::Profiler profiler;
+  MRAG::ArgumentParser parser;
+  RL_TabularPolicy *policy;
+  RL_Agent *agent;
+  MRAG::Profiler profiler;
 
-	void _save();
-	void _dispose();
-	void _refresh();
-	void _prepareAgents();
+  void _save();
+  void _dispose();
+  void _refresh();
+  void _prepareAgents();
 
 #ifdef _RL_VIZ
-	//FieldViewer field_viewer;
-	void _paint();
+  // FieldViewer field_viewer;
+  void _paint();
 #endif
 
 public:
-	
-	RL_TestTabular(const int argc, const char ** argv);
-	~RL_TestTabular();
-	
-	void run();
-	void paint(){};
+  RL_TestTabular(const int argc, const char **argv);
+  ~RL_TestTabular();
+
+  void run();
+  void paint() {};
 };
 
-}
+} // namespace RL

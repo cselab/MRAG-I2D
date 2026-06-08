@@ -63,16 +63,16 @@
 
 using namespace std;
 
-static const double PI_RNG   =  3.1415926535897932;
-static const double AD_l =  0.6931471805599453;
-static const double AD_a =  5.7133631526454228;
-static const double AD_b =  3.4142135623730950;
+static const double PI_RNG = 3.1415926535897932;
+static const double AD_l = 0.6931471805599453;
+static const double AD_a = 5.7133631526454228;
+static const double AD_b = 3.4142135623730950;
 static const double AD_c = -1.6734053240284925;
-static const double AD_p =  0.9802581434685472;
-static const double AD_A =  5.6005707569738080;
-static const double AD_B =  3.3468106480569850;
-static const double AD_H =  0.0026106723602095;
-static const double AD_D =  0.0857864376269050;
+static const double AD_p = 0.9802581434685472;
+static const double AD_A = 5.6005707569738080;
+static const double AD_B = 3.3468106480569850;
+static const double AD_H = 0.0026106723602095;
+static const double AD_D = 0.0857864376269050;
 
 typedef signed int sint;
 typedef unsigned int uint;
@@ -87,64 +87,78 @@ inline slong UL32toSL32(ulong x) { return (slong(x)); }
 inline ulong ULONG32(slong x) { return (ulong(x) & 0xfffffffful); }
 inline ulong ULONG32(ulong x) { return (x & 0xfffffffful); }
 inline ulong ULONG32(double x) { return (ulong(x) & 0xfffffffful); }
-inline slong UL32toSL32(ulong x)
-  { return (x < 0x80000000ul ? slong(x) : -1 * (0x80000000ul - (x & 0x7ffffffful))); }
+inline slong UL32toSL32(ulong x) {
+  return (x < 0x80000000ul ? slong(x)
+                           : -1 * (0x80000000ul - (x & 0x7ffffffful)));
+}
 #endif
 
-class RNG
-{
- private:
+class RNG {
+private:
   ulong z, w, jsr, jcong; // Seeds
 
   static ulong tm; // Used to ensure different RNGs have different seeds.
   static ulong kn[128], ke[256];
-  static double wn[128], fn[128], we[256],fe[256];
+  static double wn[128], fn[128], we[256], fe[256];
 
- public:
-  RNG() { init(); zigset(); }
-  RNG(ulong x_) :
-    z(x_), w(x_), jsr(x_), jcong(x_) { zigset(); }
-  RNG(ulong z_, ulong w_, ulong jsr_, ulong jcong_ ) :
-    z(z_), w(w_), jsr(jsr_), jcong(jcong_) { zigset(); }
-  ~RNG() { }
+public:
+  RNG() {
+    init();
+    zigset();
+  }
+  RNG(ulong x_) : z(x_), w(x_), jsr(x_), jcong(x_) { zigset(); }
+  RNG(ulong z_, ulong w_, ulong jsr_, ulong jcong_)
+      : z(z_), w(w_), jsr(jsr_), jcong(jcong_) {
+    zigset();
+  }
+  ~RNG() {}
 
 #if ULONG_MAX == 4294967295ul
   // 32 bit unsigned longs
-  ulong znew() 
-    { return (z = 36969 * (z & 0xfffful) + (z >> 16)); }
-  ulong wnew() 
-    { return (w = 18000 * (w & 0xfffful) + (w >> 16)); }
-  ulong MWC()  
-    { return ((znew() << 16) + wnew()); }
-  ulong SHR3()
-    { jsr ^= (jsr << 17); jsr ^= (jsr >> 13); return (jsr ^= (jsr << 5)); }
-  ulong CONG() 
-    { return (jcong = 69069 * jcong + 1234567); }
-  ulong rand_int32()       // [0,2^32-1]
-    { return ((MWC() ^ CONG()) + SHR3()); }
-  ulong rand_int()         // [0,2^32-1]
-    { return ((MWC() ^ CONG()) + SHR3()); }
+  ulong znew() { return (z = 36969 * (z & 0xfffful) + (z >> 16)); }
+  ulong wnew() { return (w = 18000 * (w & 0xfffful) + (w >> 16)); }
+  ulong MWC() { return ((znew() << 16) + wnew()); }
+  ulong SHR3() {
+    jsr ^= (jsr << 17);
+    jsr ^= (jsr >> 13);
+    return (jsr ^= (jsr << 5));
+  }
+  ulong CONG() { return (jcong = 69069 * jcong + 1234567); }
+  ulong rand_int32() // [0,2^32-1]
+  {
+    return ((MWC() ^ CONG()) + SHR3());
+  }
+  ulong rand_int() // [0,2^32-1]
+  {
+    return ((MWC() ^ CONG()) + SHR3());
+  }
 #elif ULONG_MAX == 18446744073709551615ul
 #ifdef RNG_C
 #warning "Compiling RNG class for 64-bit architecture"
 #endif
   // 64-bit unsigned longs
   // This is not as elegant and fast as it could be, but it works.
-  ulong znew() 
-    { return (z = ((36969 * (z & 0xfffful) + (z >> 16)) & 0xfffffffful)); }
-  ulong wnew() 
-    { return (w = ((18000 * (w & 0xfffful) + (w >> 16)) & 0xfffffffful)); }
-  ulong MWC()  
-    { return (((znew() << 16) + wnew()) & 0xfffffffful); }
-  ulong SHR3()
-    { jsr ^= (jsr << 17); jsr ^= (jsr >> 13);
-      return (jsr = ((jsr ^= (jsr << 5)) & 0xfffffffful)); }
-  ulong CONG() 
-    { return (jcong = ((69069 * jcong + 1234567) & 0xfffffffful)); }
-  ulong rand_int32()         // [0,2^32-1]
-    { return (((MWC() ^ CONG()) + SHR3()) & 0xfffffffful); }
-  ulong rand_int()           // [0,2^64-1]
-    { return (rand_int32() | (rand_int32() << 32)); }
+  ulong znew() {
+    return (z = ((36969 * (z & 0xfffful) + (z >> 16)) & 0xfffffffful));
+  }
+  ulong wnew() {
+    return (w = ((18000 * (w & 0xfffful) + (w >> 16)) & 0xfffffffful));
+  }
+  ulong MWC() { return (((znew() << 16) + wnew()) & 0xfffffffful); }
+  ulong SHR3() {
+    jsr ^= (jsr << 17);
+    jsr ^= (jsr >> 13);
+    return (jsr = ((jsr ^= (jsr << 5)) & 0xfffffffful));
+  }
+  ulong CONG() { return (jcong = ((69069 * jcong + 1234567) & 0xfffffffful)); }
+  ulong rand_int32() // [0,2^32-1]
+  {
+    return (((MWC() ^ CONG()) + SHR3()) & 0xfffffffful);
+  }
+  ulong rand_int() // [0,2^64-1]
+  {
+    return (rand_int32() | (rand_int32() << 32));
+  }
 #endif
   double RNOR() {
     slong h = UL32toSL32(rand_int32()), i = h & 127;
@@ -159,61 +173,77 @@ class RNG
   double efix(ulong j, ulong i);
   void zigset();
 
-  void init()
-    { z = w = jsr = jcong = ulong(time(0)) + tm; tm += 123457; }
-  void init(ulong z_, ulong w_, ulong jsr_, ulong jcong_ )
-    { z = z_; w = w_; jsr = jsr_; jcong = jcong_; }
+  void init() {
+    z = w = jsr = jcong = ulong(time(0)) + tm;
+    tm += 123457;
+  }
+  void init(ulong z_, ulong w_, ulong jsr_, ulong jcong_) {
+    z = z_;
+    w = w_;
+    jsr = jsr_;
+    jcong = jcong_;
+  }
 
   // For a faster but lower quality RNG, uncomment the following
   // line, and comment out the original definition of rand_int above.
   // In practice, the faster RNG will be fine for simulations
   // that do not simulate more than a few billion random numbers.
   // ulong rand_int() { return SHR3(); }
-  long rand_int31()          // [0,2^31-1]
-    { return ((long) rand_int32() >> 1);}
-  double rand_closed01()     // [0,1]
-    { return ((double) rand_int() / double(ULONG_MAX)); }
-  double rand_open01()       // (0,1)
-    { return (((double) rand_int() + 1.0) / (ULONG_MAX + 2.0)); }
+  long rand_int31() // [0,2^31-1]
+  {
+    return ((long)rand_int32() >> 1);
+  }
+  double rand_closed01() // [0,1]
+  {
+    return ((double)rand_int() / double(ULONG_MAX));
+  }
+  double rand_open01() // (0,1)
+  {
+    return (((double)rand_int() + 1.0) / (ULONG_MAX + 2.0));
+  }
   double rand_halfclosed01() // [0,1)
-    { return ((double) rand_int() / (ULONG_MAX + 1.0)); }
-  double rand_halfopen01()   // (0,1]
-    { return (((double) rand_int() + 1.0) / (ULONG_MAX + 1.0)); }
+  {
+    return ((double)rand_int() / (ULONG_MAX + 1.0));
+  }
+  double rand_halfopen01() // (0,1]
+  {
+    return (((double)rand_int() + 1.0) / (ULONG_MAX + 1.0));
+  }
 
   // Continuous Distributions
-  double uniform(double x = 0.0, double y = 1.0)
-    { return rand_closed01() * (y - x) + x; }
-  double normal(double mu = 0.0, double sd = 1.0)
-    { return RNOR() * sd + mu; }
-  double exponential(double lambda = 1)
-    { return REXP() / lambda; }
+  double uniform(double x = 0.0, double y = 1.0) {
+    return rand_closed01() * (y - x) + x;
+  }
+  double normal(double mu = 0.0, double sd = 1.0) { return RNOR() * sd + mu; }
+  double exponential(double lambda = 1) { return REXP() / lambda; }
   double gamma(double shape = 1, double scale = 1);
-  double chi_square(double df)
-    { return gamma(df / 2.0, 0.5); }
-  double beta(double a1, double a2)
-    { const double x1 = gamma(a1, 1); return (x1 / (x1 + gamma(a2, 1))); }
+  double chi_square(double df) { return gamma(df / 2.0, 0.5); }
+  double beta(double a1, double a2) {
+    const double x1 = gamma(a1, 1);
+    return (x1 / (x1 + gamma(a2, 1)));
+  }
 
-  void uniform(vector<double>& res, double x = 0.0, double y = 1.0) {
+  void uniform(vector<double> &res, double x = 0.0, double y = 1.0) {
     for (vector<double>::iterator i = res.begin(); i != res.end(); ++i)
       *i = uniform(x, y);
   }
-  void normal(vector<double>& res, double mu = 0.0, double sd = 1.0) {
+  void normal(vector<double> &res, double mu = 0.0, double sd = 1.0) {
     for (vector<double>::iterator i = res.begin(); i != res.end(); ++i)
       *i = normal(mu, sd);
   }
-  void exponential(vector<double>& res, double lambda = 1) {
+  void exponential(vector<double> &res, double lambda = 1) {
     for (vector<double>::iterator i = res.begin(); i != res.end(); ++i)
       *i = exponential(lambda);
   }
-  void gamma(vector<double>& res, double shape = 1, double scale = 1) {
+  void gamma(vector<double> &res, double shape = 1, double scale = 1) {
     for (vector<double>::iterator i = res.begin(); i != res.end(); ++i)
       *i = gamma(shape, scale);
   }
-  void chi_square(vector<double>& res, double df) {
+  void chi_square(vector<double> &res, double df) {
     for (vector<double>::iterator i = res.begin(); i != res.end(); ++i)
       *i = chi_square(df);
   }
-  void beta(vector<double>& res, double a1, double a2) {
+  void beta(vector<double> &res, double a1, double a2) {
     for (vector<double>::iterator i = res.begin(); i != res.end(); ++i)
       *i = beta(a1, a2);
   }
@@ -221,14 +251,15 @@ class RNG
   // Discrete Distributions
   int poisson(double mu);
   int binomial(double p, int n);
-  void multinom(unsigned int n, const vector<double>& probs, vector<uint>& samp);
-  void multinom(unsigned int n, const double* prob, uint K, uint* samp);
+  void multinom(unsigned int n, const vector<double> &probs,
+                vector<uint> &samp);
+  void multinom(unsigned int n, const double *prob, uint K, uint *samp);
 
-  void poisson(vector<int>& res, double lambda) {
+  void poisson(vector<int> &res, double lambda) {
     for (vector<int>::iterator i = res.begin(); i != res.end(); ++i)
       *i = poisson(lambda);
   }
-  void binomial(vector<int>& res, double p, int n) {
+  void binomial(vector<int> &res, double p, int n) {
     for (vector<int>::iterator i = res.begin(); i != res.end(); ++i)
       *i = binomial(p, n);
   }
@@ -236,4 +267,3 @@ class RNG
 }; // class RNG
 
 #endif // RNG_H
-

@@ -14,36 +14,32 @@
 #include "I2D_AdvectionOperator.h"
 #include "MRAGio/MRAG_IO_XDMF.h"
 
+class I2D_TestAdvection : public I2D_Test {
+  ArgumentParser parser;
 
-class I2D_TestAdvection: public I2D_Test
-{
-	ArgumentParser parser;
+  Grid<W, B> *grid;
+  Refiner *refiner;
+  Compressor *compressor;
 
-	Grid<W,B> * grid;
-	Refiner * refiner;
-	Compressor * compressor;
+  BlockFWT<W, B, vorticity_projector, false, 1> fwt_omega;
 
-	BlockFWT<W, B, vorticity_projector, false, 1> fwt_omega;
+  I2D_AdvectionOperator *advection;
 
-	I2D_AdvectionOperator * advection;
+  std::vector<IO_XDMF<W, B, 4, 0>::Frame> dumpframes;
 
-	std::vector<IO_XDMF<W,B,4,0>::Frame> dumpframes;
+  set<int> _getBoundaryBlockIDs();
+  void _dump(string filename);
+  static void _ic_omega(Grid<W, B> &grid);
+  static void _ic_velocity(Grid<W, B> &grid);
 
-	set<int> _getBoundaryBlockIDs();
-	void _dump(string filename);
-	static void _ic_omega(Grid<W,B>& grid);
-	static void _ic_velocity(Grid<W,B>& grid);
-	
-	int step_id;
-	
-	void _refine(bool bUseIC);
-	void _compress(bool bUseIC);
-	
+  int step_id;
+
+  void _refine(bool bUseIC);
+  void _compress(bool bUseIC);
+
 public:
-	
-	I2D_TestAdvection(const int argc, const char ** argv);
-	
-	void run();
-	void paint();
-};
+  I2D_TestAdvection(const int argc, const char **argv);
 
+  void run();
+  void paint();
+};

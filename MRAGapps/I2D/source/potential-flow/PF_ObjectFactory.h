@@ -13,24 +13,24 @@
 #include "RL_TabularPolicy.h"
 #include "PF_Agent.h"
 
-namespace PF
-{
+namespace PF {
 
-class PF_ObjectFactory
-{
+class PF_ObjectFactory {
 public:
-	PF_ObjectFactory(const Real charLength, const Real XCM, const Real YCM);
-	~PF_ObjectFactory(){};
+  PF_ObjectFactory(const Real charLength, const Real XCM, const Real YCM);
+  ~PF_ObjectFactory() {};
 
-	void create(MRAG::ArgumentParser & parser, map< string, vector<PF_Agent*> >& shapesMap, const Real lr, const Real gamma, RL::RL_TabularPolicy ** policy = NULL);
-	Real getUnitVelocity();
+  void create(MRAG::ArgumentParser &parser,
+              map<string, vector<PF_Agent *>> &shapesMap, const Real lr,
+              const Real gamma, RL::RL_TabularPolicy **policy = NULL);
+  Real getUnitVelocity();
 
 private:
-	const Real charLength, XCM, YCM;
-	Real unitVelocity;
+  const Real charLength, XCM, YCM;
+  Real unitVelocity;
 
-	int _lines(string filename);
-	void maximumVelocity(Real v);
+  int _lines(string filename);
+  void maximumVelocity(Real v);
 };
 
 } /*namespace PF*/

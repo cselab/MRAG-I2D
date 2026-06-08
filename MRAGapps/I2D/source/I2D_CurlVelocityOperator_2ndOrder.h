@@ -13,14 +13,14 @@
 
 class I2D_CurlVelocityOperator_2ndOrder
 {
-	Grid<W,B>& grid;
-	BlockProcessing block_processing;
-	
+        Grid<W,B>& grid;
+        BlockProcessing block_processing;
+
 public:
-	
-	I2D_CurlVelocityOperator_2ndOrder(Grid<W,B>& grid): grid(grid){}
-	
-	void perform();
+
+        I2D_CurlVelocityOperator_2ndOrder(Grid<W,B>& grid): grid(grid){}
+
+        void perform();
 };
 
 */

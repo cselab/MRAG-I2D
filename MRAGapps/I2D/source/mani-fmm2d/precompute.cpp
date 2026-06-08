@@ -8,6 +8,6 @@
  */
 
 #include "precompute.h"
-//tfactorial factorial(17);
-tfactorial factorial(17*2);
+// tfactorial factorial(17);
+tfactorial factorial(17 * 2);
 tAnm Anm(6);

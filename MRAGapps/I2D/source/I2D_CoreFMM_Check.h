@@ -11,10 +11,9 @@
 
 #include "I2D_CoreFMM_AggressiveVel.h"
 
-class I2D_CoreFMM_Check : public I2D_CoreFMM_AggressiveVel
-{
+class I2D_CoreFMM_Check : public I2D_CoreFMM_AggressiveVel {
 public:
-
-	virtual void solve(const Real theta, const Real inv_scaling, BlockInfo * dest, const int nblocks, VelocitySourceParticle * srcparticles, const int nparticles);
-
+  virtual void solve(const Real theta, const Real inv_scaling, BlockInfo *dest,
+                     const int nblocks, VelocitySourceParticle *srcparticles,
+                     const int nparticles);
 };
