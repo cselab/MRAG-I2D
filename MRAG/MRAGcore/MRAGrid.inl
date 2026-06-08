@@ -913,7 +913,6 @@ void Grid<WaveletType, BlockType>::_computeBoundaryInfo(
       vNodesToCompute);
 
 #ifdef _MRAG_TBB
-  printf("(Grid::_computeBoundaryInfo: TBB)\n");
   tbb::parallel_for(tbb::blocked_range<size_t>(0, n), body,
                     tbb::auto_partitioner());
 #else
