@@ -101,7 +101,16 @@ int main(int argc, char **argv) {
   double t = 0;
   std::vector<IO_XDMF<W, B>::Frame> frames;
   std::vector<IO_Blocks<W, B>::Frame> bframes;
-  for (int step = 0; step < nsteps; step++) {
+
+  {
+    const char *names[] = {"omega"};
+    IO_XDMF<W, B> xdmf;
+    frames.push_back(xdmf.Write(grid, "omega.0000", t, 0, names));
+    bframes.push_back(IO_Blocks<W, B>::Write(grid, "blocks.0000", t));
+    printf("step 0 t=0.0000 blocks=%zu (IC)\n", grid.getBlocksInfo().size());
+  }
+
+  for (int step = 1; step <= nsteps; step++) {
     Science::AutomaticRefinement<0, 0>(grid, blockfwt, rtol, maxLevel, -1);
 
     std::vector<BlockInfo> vInfo = grid.getBlocksInfo();
