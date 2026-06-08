@@ -25,9 +25,11 @@ template <typename TWavelets, typename TBlock> struct IO_Blocks {
 
     FILE *fxyz = fopen((name + ".xyz.raw").c_str(), "wb");
     FILE *flev = fopen((name + ".level.raw").c_str(), "wb");
+    const Real off = TWavelets::CenteringOffset;
     for (long i = 0; i < nb; i++) {
       const BlockInfo &b = vInfo[i];
-      const float x0 = b.origin[0], y0 = b.origin[1];
+      const float x0 = b.origin[0] - off * b.h[0];
+      const float y0 = b.origin[1] - off * b.h[1];
       const float x1 = x0 + TBlock::sizeX * b.h[0];
       const float y1 = y0 + TBlock::sizeY * b.h[1];
       const float q[8] = {x0, y0, x0, y1, x1, y1, x1, y0};
