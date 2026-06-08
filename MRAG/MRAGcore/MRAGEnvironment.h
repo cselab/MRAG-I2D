@@ -43,6 +43,7 @@ namespace MRAG {
 #ifdef _MRAG_TBB
 #include <stdio.h>
 #include <tbb/global_control.h>
+#include <tbb/tick_count.h>
 #endif
 #pragma once
 namespace MRAG {
