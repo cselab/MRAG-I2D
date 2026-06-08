@@ -14,7 +14,7 @@
 #include <cmath>
 #include <cstdio>
 #include <vector>
-#include <map>
+#include <string>
 
 #include "MRAGcore/MRAGCommon.h"
 #include "MRAGcore/MRAGEnvironment.h"
@@ -36,8 +36,8 @@ typedef Block<Real, 32, 32, 1>        B;
 // LeVeque single-vortex deformation benchmark initial shape:
 // a circle of radius R0 centered at (XC,YC) in the unit square.
 static const double R0 = 0.15;
-static const double XC = 0.5;
-static const double YC = 0.75;
+static double XC = 0.5;
+static double YC = 0.75;
 
 // Smoothed-indicator "color" function: ~1 inside the circle, ~0 outside, with
 // a sharp transition AT the interface. This is the quantity the LeVeque
@@ -70,85 +70,40 @@ static void _ic(Grid<W, B>& grid)
 	}
 }
 
-// report how many blocks live at each refinement level
-static void _report(Grid<W, B>& grid, const char* tag)
-{
-	std::vector<BlockInfo> vInfo = grid.getBlocksInfo();
-	std::map<int, int> perLevel;
-	for (int i = 0; i < (int)vInfo.size(); i++)
-		perLevel[vInfo[i].level]++;
-
-	printf("[%s] %zu blocks total (%zu cells)\n",
-	       tag, vInfo.size(), vInfo.size() * (size_t)(B::sizeX * B::sizeY));
-	for (std::map<int, int>::const_iterator it = perLevel.begin(); it != perLevel.end(); ++it)
-		printf("    level %d : %d blocks\n", it->first, it->second);
-}
-
-// dump the leaf cells as an ASCII point cloud (x y phi level) for plotting
-static void _dump(Grid<W, B>& grid, const char* fname)
-{
-	FILE* f = fopen(fname, "w");
-	if (!f) { printf("could not open %s\n", fname); return; }
-
-	std::vector<BlockInfo> vInfo = grid.getBlocksInfo();
-	for (int i = 0; i < (int)vInfo.size(); i++)
-	{
-		BlockInfo& info  = vInfo[i];
-		B&         block = grid.getBlockCollection()[info.blockID];
-		for (int iy = 0; iy < B::sizeY; iy++)
-			for (int ix = 0; ix < B::sizeX; ix++)
-			{
-				double x[2];
-				info.pos(x, ix, iy);
-				fprintf(f, "%g\t%g\t%g\t%d\n", x[0], x[1], (double)block(ix, iy), info.level);
-			}
-	}
-	fclose(f);
-	printf("wrote %s\n", fname);
-}
-
 int main(int argc, char** argv)
 {
-	const int    nBlocks  = 4;      // 4x4 coarse blocks
-	const double tol      = 1e-3;   // wavelet-detail refinement threshold
-	const int    maxLevel = 5;      // cap on refinement depth
+	const int    nBlocks  = 4;
+	const double tol      = 1e-3;
+	const int    maxLevel = 5;
+	const int    nsteps   = 20;
 
-	// no-op under -D_MRAG_SERIAL; sets the TBB worker count otherwise
 	Environment::setup();
 
-	Grid<W, B>  grid(nBlocks, nBlocks, 1);
-	Refiner     refiner;
-	Compressor  compressor;
-	grid.setRefiner(&refiner);
-	grid.setCompressor(&compressor);
+	std::vector<IO_XDMF<W, B>::Frame> frames;
+	for (int step = 0; step < nsteps; step++)
+	{
+		const double t = (double)step / nsteps;
+		XC = 0.5 + 0.2 * std::cos(2.0 * M_PI * t);
+		YC = 0.5 + 0.2 * std::sin(2.0 * M_PI * t);
 
-	BlockFWT<W, B> blockfwt;
+		Grid<W, B>  grid(nBlocks, nBlocks, 1);
+		Refiner     refiner;
+		Compressor  compressor;
+		grid.setRefiner(&refiner);
+		grid.setCompressor(&compressor);
+		BlockFWT<W, B> blockfwt;
 
-	_ic(grid);
-	_report(grid, "initial");
+		_ic(grid);
+		Science::AutomaticRefinement<0, 0>(grid, blockfwt, tol, maxLevel, -1, NULL, _ic);
 
-	// wavelet-detail-driven adaptive refinement around the interface.
-	// AutomaticRefinement runs a per-block fast wavelet transform and refines
-	// any block whose detail coefficient exceeds `tol`, looping until the whole
-	// grid is below tolerance (or maxLevel is reached). The grid ends up just
-	// fine enough to resolve the interface band to tolerance -- exactly the
-	// multiresolution behaviour behind ppm/c.
-	Science::AutomaticRefinement<0, 0>(grid, blockfwt, tol, maxLevel, -1, NULL, _ic);
-	_report(grid, "refined");
-	_dump(grid, "phi_refined.txt");
+		char name[64];
+		sprintf(name, "phi.%04d", step);
+		IO_XDMF<W, B> xdmf;
+		xdmf.Write(grid, name, "phi", t, step);
+		frames.push_back(std::string(name) + ".xdmf2");
+	}
 
-	// real ParaView output: XDMF descriptor + raw binary (no VTK/HDF5 needed)
-	IO_XDMF<Grid<W, B> > xdmf;
-	xdmf.Write(grid, "phi_refined", "phi");
-
-	// NOTE: Science::AutomaticCompression is intentionally not called here.
-	// It does not terminate for this case: grid.compress() refuses to collapse
-	// blocks that would violate the 2:1 grading constraint and returns early
-	// with nCollapses==0, yet the loop sees a non-zero phantom count and never
-	// breaks. The refinement above is the demonstration of the wavelet
-	// multiresolution criterion; round-trip compression would need the
-	// levelset-specific AutomaticCompressionForLevelsets path.
-
-	printf("done.\n");
+	IO_XDMF<W, B>::WriteTemporalMaster("phi", frames);
+	printf("done: %d frames; open phi.xdmf2 in ParaView\n", nsteps);
 	return 0;
 }

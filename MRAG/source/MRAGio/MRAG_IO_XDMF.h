@@ -1,10 +1,5 @@
 #pragma once
 
-// Dependency-free XDMF writer (XML descriptor + raw binary sidecars), modeled
-// on the CUP2D dump(): each leaf cell becomes an independent Quadrilateral with
-// 4 explicit corners (implicit sequential connectivity), and a cell-centered
-// scalar attribute. Renders in ParaView with no VTK/HDF5/XDMF library.
-
 #include <cstdio>
 #include <string>
 #include <vector>
@@ -12,11 +7,9 @@
 
 namespace MRAG
 {
-	template<typename GridType>
+	template<typename TWavelets, typename TBlock>
 	class IO_XDMF
 	{
-		typedef typename GridType::GridBlockType TBlock;
-
 		static std::string _basename(const std::string& p)
 		{
 			const size_t s = p.find_last_of('/');
@@ -24,9 +17,18 @@ namespace MRAG
 		}
 
 	public:
-		// writes fileName.xdmf2 + fileName.xyz.raw + fileName.<channel>.raw
-		void Write(GridType& grid, const std::string& fileName,
-		           const char* channelName = "phi", double time = 0.0, int step = 0)
+		struct Frame
+		{
+			double      time;
+			long        ncells;
+			std::string geom;
+			std::string attr;
+			std::string channel;
+		};
+
+		template<typename GridType>
+		Frame Write(GridType& grid, const std::string& fileName,
+		            const char* channelName = "phi", double time = 0.0, int step = 0)
 		{
 			std::vector<BlockInfo> vInfo = grid.getBlocksInfo();
 			const int  bx = TBlock::sizeX, by = TBlock::sizeY;
@@ -35,7 +37,6 @@ namespace MRAG
 			const std::string xyzPath  = fileName + ".xyz.raw";
 			const std::string attrPath = fileName + "." + channelName + ".raw";
 
-			// 1) XML descriptor (binary sidecars referenced by basename => movable)
 			const std::string xdmfPath = fileName + ".xdmf2";
 			FILE* xdmf = fopen(xdmfPath.c_str(), "w");
 			if (xdmf == NULL) { printf("IO_XDMF: cannot open %s\n", xdmfPath.c_str()); return; }
@@ -61,7 +62,7 @@ namespace MRAG
 			        channelName, ncells, (long)sizeof(Real), _basename(attrPath).c_str());
 			fclose(xdmf);
 
-			// 2) geometry: 4 corners per cell (CCW) as float
+			const double off = TWavelets::CenteringOffset;
 			FILE* fxyz = fopen(xyzPath.c_str(), "wb");
 			for (int i = 0; i < (int)vInfo.size(); i++)
 			{
@@ -72,14 +73,14 @@ namespace MRAG
 					{
 						double x[2];
 						info.pos(x, ix, iy);
-						const float u0 = x[0], v0 = x[1], u1 = x[0] + h, v1 = x[1] + h;
+						const float u0 = x[0] - off * h, v0 = x[1] - off * h;
+						const float u1 = u0 + h, v1 = v0 + h;
 						const float q[8] = { u0,v0, u0,v1, u1,v1, u1,v0 };
 						fwrite(q, sizeof(float), 8, fxyz);
 					}
 			}
 			fclose(fxyz);
 
-			// 3) attribute: cell-centered scalar, block order
 			FILE* fattr = fopen(attrPath.c_str(), "wb");
 			for (int i = 0; i < (int)vInfo.size(); i++)
 			{
@@ -96,6 +97,67 @@ namespace MRAG
 
 			printf("wrote %s (+ .xyz.raw, .%s.raw), %ld cells\n",
 			       xdmfPath.c_str(), channelName, ncells);
+
+			Frame f;
+			f.time = time; f.ncells = ncells;
+			f.geom = _basename(xyzPath); f.attr = _basename(attrPath); f.channel = channelName;
+			return f;
+		}
+
+		static void WriteTemporalMaster(const std::string& masterName,
+		                                const std::vector<Frame>& frames)
+		{
+			const std::string path = masterName + ".xdmf2";
+			FILE* m = fopen(path.c_str(), "w");
+			if (m == NULL) {
+				fprintf(stderr, "IO_XDMF: cannot open %s\n", path.c_str());
+				return;
+			}
+			fprintf(m,
+			        "<Xdmf\n"
+			        "    Version=\"2\">\n"
+			        "  <Domain>\n"
+			        "    <Grid\n"
+			        "        GridType=\"Collection\"\n"
+			        "        CollectionType=\"Temporal\">\n");
+			for (size_t i = 0; i < frames.size(); i++) {
+				const Frame& f = frames[i];
+				fprintf(m,
+				        "      <Grid>\n"
+				        "        <Time\n"
+				        "            Value=\"%.16e\"/>\n"
+				        "        <Topology\n"
+				        "            TopologyType=\"Quadrilateral\"\n"
+				        "            Dimensions=\"%ld\"/>\n"
+				        "        <Geometry\n"
+				        "            GeometryType=\"XY\">\n"
+				        "          <DataItem\n"
+				        "              Dimensions=\"%ld 2\"\n"
+				        "              Format=\"Binary\">\n"
+				        "            %s\n"
+				        "          </DataItem>\n"
+				        "        </Geometry>\n"
+				        "        <Attribute\n"
+				        "            AttributeType=\"Scalar\"\n"
+				        "            Name=\"%s\"\n"
+				        "            Center=\"Cell\">\n"
+				        "          <DataItem\n"
+				        "              Dimensions=\"%ld 1\"\n"
+				        "              Precision=\"%ld\"\n"
+				        "              Format=\"Binary\">\n"
+				        "            %s\n"
+				        "          </DataItem>\n"
+				        "        </Attribute>\n"
+				        "      </Grid>\n",
+				        f.time, f.ncells, f.ncells, f.geom.c_str(),
+				        f.channel.c_str(), f.ncells, (long)sizeof(Real), f.attr.c_str());
+			}
+			fprintf(m,
+			        "    </Grid>\n"
+			        "  </Domain>\n"
+			        "</Xdmf>\n");
+			fclose(m);
+			printf("wrote %s (temporal master, %zu frames)\n", path.c_str(), frames.size());
 		}
 	};
 }
