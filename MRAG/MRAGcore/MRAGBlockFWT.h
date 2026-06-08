@@ -472,7 +472,6 @@ public:
           new FWTReport<nChannels>(nReportSizeX, nReportSizeY, nReportSizeZ);
 
 #ifdef _MRAG_TBB
-    printf("(BlockFWT::multichannel_fwt: TBB)\n");
     const int nThreads = _MRAG_TBB_NTHREADS_HINT;
     tbb::parallel_for(
         tbb::blocked_range<size_t>(0, n, std::max(1, n / nThreads)), body);
