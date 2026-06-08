@@ -42,8 +42,6 @@ int AutomaticRefinement(Grid &g, BlockFWT &fwt, const double dAbsoluteTolerance,
                         void (*fillGrid)(Grid &g) = NULL,
                         set<int> *dont_refine = NULL) {
   int loopCounter = 0;
-
-  printf("AutomaticRefinement\n");
   set<int> niceGuys;
   int nSkippedBlocks = 0;
   int nRefinedBlocks = 0;
@@ -105,10 +103,6 @@ int AutomaticRefinement(Grid &g, BlockFWT &fwt, const double dAbsoluteTolerance,
 
     if (fillGrid != NULL)
       fillGrid(g);
-
-    //	printf("AutomaticRefinement:: Refined %d, FWT skipped blocks:%d\n",
-    //shouldBeRefined.size(), nSkippedBlocks);
-
     loopCounter++;
 
     if (iMaxLoops > 0 && loopCounter >= iMaxLoops)

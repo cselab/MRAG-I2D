@@ -192,8 +192,6 @@ public:
                "  </Domain>\n"
                "</Xdmf>\n");
     fclose(m);
-    printf("wrote %s (temporal master, %zu frames)\n", path.c_str(),
-           frames.size());
   }
 };
 } // namespace MRAG
