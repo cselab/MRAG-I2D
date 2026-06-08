@@ -7,7 +7,7 @@ Run (writes phi.NNNN.xdmf2 + .raw)
     make run
 
 Iso-line postprocessing (amriso)
-    python3 -m pip install --user git+https://github.com/cselab/amriso
+    python3 -m pip install git+https://github.com/cselab/amriso
     ./post.py phi.xdmf2 --out iso
 
 View

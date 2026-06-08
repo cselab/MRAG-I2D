@@ -1224,7 +1224,6 @@ void Grid<WaveletType, BlockType>::_computeNeighborhood(
         }
       }
     }
-    printf("Total Added: %d\n", nAdded);
   }
 
   if (nPeriodicBoundaries > 0) {
