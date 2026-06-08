@@ -8,7 +8,7 @@ CORE = $(SRC)/MRAGWavelets_StaticData.cpp \
        $(SRC)/MRAGBoundaryBlockInfo.cpp \
        $(SRC)/QtBox.cpp \
        $(SRC)/QuadTree.cpp
-main: $(SRC)/main.cpp $(SRC)/screenshot.cpp $(CORE)
+main: main.cpp screenshot.cpp $(CORE)
 	$(CXX) $(CXXFLAGS) $(TBB_FLAGS) $^ -o $@ -I$(SRC) $(GL_FRAMEWORKS)
 clean:
 	rm -f main

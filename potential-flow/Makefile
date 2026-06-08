@@ -21,7 +21,7 @@ ifdef VIZ
 CXXFLAGS += -D_RL_VIZ
 endif
 
-PF_SRC = $(wildcard $(SRC)/PF_*.cpp)
+PF_SRC = $(wildcard PF_*.cpp)
 RL_SRC = $(SRC)/RL_QLearning.cpp $(SRC)/RL_MultiTable.cpp $(SRC)/rng.cpp
 CORE   = $(SRC)/MRAGWavelets_StaticData.cpp \
          $(SRC)/MRAGBoundaryBlockInfo.cpp \

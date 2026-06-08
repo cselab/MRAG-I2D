@@ -10,9 +10,10 @@ INCLUDES = -I$(SRC)/sse-compat -I/opt/homebrew/include -I$(SRC) \
 TBB_LIBS   = $(shell pkg-config --libs tbb) -ltbbmalloc
 TBB_LIBDIR = $(shell pkg-config --variable=libdir tbb)
 
-# top-level I2D sources, minus the alternate main()s
-I2D_SRC = $(filter-out $(SRC)/I2D_AveMaria.cpp $(SRC)/I2D_Chloe.cpp $(SRC)/I2D_Mattia.cpp, \
-                       $(wildcard $(SRC)/I2D_*.cpp))
+# local entry point + the I2D solver library (no main()) from src/.
+# The alternate main()s (I2D_AveMaria/Chloe/Mattia.cpp) also live here but are
+# intentionally not compiled.
+I2D_SRC = I2D_main.cpp $(wildcard $(SRC)/I2D_*.cpp)
 FMM_SRC = $(SRC)/binomial.cpp $(SRC)/precompute.cpp
 RL_SRC  = $(SRC)/RL_QLearning.cpp $(SRC)/RL_MultiTable.cpp $(SRC)/rng.cpp
 CORE    = $(SRC)/MRAGWavelets_StaticData.cpp \

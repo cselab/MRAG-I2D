@@ -23,9 +23,7 @@ static const double R0 = 0.15;
 static double XC = 0.5;
 static double YC = 0.75;
 static inline double phi0(double x, double y) {
-  const double d = std::sqrt((x - XC) * (x - XC) + (y - YC) * (y - YC)) - R0;
-  const double eps = 0.02; // transition half-width (a few finest cells)
-  return 0.5 * (1.0 - std::tanh(d / eps));
+  return std::sqrt((x - XC) * (x - XC) + (y - YC) * (y - YC)) - R0;
 }
 static void _ic(Grid<W, B> &grid) {
   std::vector<BlockInfo> vInfo = grid.getBlocksInfo();
