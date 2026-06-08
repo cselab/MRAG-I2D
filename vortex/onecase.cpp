@@ -37,7 +37,7 @@ make_projector(WARP_projector, scalar_projector_impl)
 
 static const int blockSize = 8;
 static const int nBlocks = 4;
-static const int maxLevel = 4;
+static const int maxLevel = 6;
 static const int resJump = 1;
 static const int maxStencil[2][3] = {-3, -3, 0, +4, +4, 1};
 static const double ctol = 5e-5;
