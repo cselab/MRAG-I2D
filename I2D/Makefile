@@ -1,10 +1,3 @@
-# Full I2D vortex solver (I2D_main), oneTBB, headless.
-# SSE intrinsics are mapped to NEON via ./sse-compat (sse2neon) on Apple Silicon.
-# VTK output is stubbed out unless _MRAG_VTK is defined (no VTK install needed).
-#
-#   make -f Makefile.i2d            -> build ./i2d
-#   make -f Makefile.i2d run        -> build + run a short advection study
-
 MRAG = ../MRAG
 CXX  = g++-15
 
