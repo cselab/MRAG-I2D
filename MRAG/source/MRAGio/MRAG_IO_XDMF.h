@@ -165,7 +165,7 @@ namespace MRAG
 				        "            %s\n"
 				        "          </DataItem>\n"
 				        "        </Geometry>\n",
-				        f.time, f.ncells, f.ncells, f.geom.c_str());
+				        f.time, f.ncells, 4 * f.ncells, f.geom.c_str());
 				for (size_t c = 0; c < f.name.size(); c++)
 					fprintf(m,
 					        "        <Attribute\n"
